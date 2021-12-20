@@ -150,6 +150,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'blog.pagination.StandardResultsSetPagination', 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
