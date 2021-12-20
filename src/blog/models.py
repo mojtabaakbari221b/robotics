@@ -18,12 +18,18 @@ def compressImage(photo):
 
 # relational Models
 
-class Group():
+class Group(models.Model):
     title = models.CharField(unique=True , max_length=512)
 
-class Category():
-    group = models.ForeignKey(Group)
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.title})'
+
+class Category(models.Model):
+    group = models.ForeignKey(Group , on_delete=models.CASCADE)
     title = models.CharField(unique=True , max_length=512)
+
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.group.title} - {self.title})'
 
 class Company(models.Model):
     name = RichTextField(max_length=256)
@@ -34,23 +40,29 @@ class Company(models.Model):
     info = RichTextField(max_length=512)
     tags = ArrayField(models.CharField(max_length=1024))
 
-    def save(self, *args, **kwargs):
-        if self.logo :
-            self.logo = compressImage(self.logo)
-        super(Company, self).save(*args, **kwargs)
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.name})'
+
+    # def save(self, *args, **kwargs):
+    #     if self.logo :
+    #         self.logo = compressImage(self.logo)
+    #     super(Company, self).save(*args, **kwargs)
 
 class Info(models.Model):
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company , on_delete=models.CASCADE , related_name="info_company")
     address = RichTextField(max_length=1024)
     website = models.URLField(max_length=512)
     established_year = models.DateField()
     validation_of_knowledge_base = models.BooleanField(default=False)
     introduction_of_a_company = RichTextField(max_length=2048)
     number_of_staff = models.PositiveIntegerField(null=True)
-    file = models.FieldFile(upload_to='info/file')
+    file = models.FileField(upload_to='info/file')
+
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.company.name})'
 
 class Contact(models.Model):
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company , on_delete=models.CASCADE)
     interface_name = models.CharField(max_length=128)
     interface_phone_number = models.CharField(max_length=18)
     tel_channel = models.URLField(max_length=256)
@@ -58,21 +70,28 @@ class Contact(models.Model):
     email = models.EmailField(max_length=512)
     phone_number = models.CharField(max_length=18)
 
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.company.name})'
+
 class Standards(models.Model):
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company , on_delete=models.CASCADE)
     title = RichTextField(max_length=128)
     image = models.ImageField(upload_to='standard/image')
     text = RichTextField(max_length=128)
+
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.company.name})'
 
 class Product(models.Model):
     name = RichTextField(max_length=256)
     text = RichTextField(max_length=2056)
     date = models.DateField(default = now)
     image = models.ImageField(upload_to='product/image')
-    company = models.ForeignKey(Company)
-    category = models.ForeignKey(Category)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.company.name} - {self.name})'
 # 
 
 class News(models.Model):
@@ -80,7 +99,10 @@ class News(models.Model):
     date_of_submission = models.DateField(default = now)
     text = RichTextField(max_length=2056)
     src = models.URLField(max_length=2056)
-    media = models.FieldFile(upload_to='news/media')
+    media = models.FileField(upload_to='news/media')
+
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.title})'
     
 
 class Requirements(models.Model):
@@ -91,3 +113,6 @@ class Requirements(models.Model):
     image = models.ImageField(upload_to='requirements/image')
     date_of_submission = models.DateField(default = now)
     deadline = models.DateField()
+
+    def __str__(self):
+        return f'{__class__.__name__}({self.id} , {self.title})'
