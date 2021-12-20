@@ -88,7 +88,7 @@ class Product(models.Model):
     date = models.DateField(default = now)
     image = models.ImageField(upload_to='product/image')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.company.name} - {self.name})'
