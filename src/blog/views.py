@@ -1,6 +1,4 @@
 from rest_framework import viewsets
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
 from .models import (
     Group,
     Category,
@@ -27,26 +25,6 @@ from .serializers import (
 class group_view_set(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-
-    filterset_fields = [
-        'title',
-    ]
-
-    search_fields = [
-        'title',
-    ]
-
-    ordering_fields = '__all__'
-
-    ordering = [
-        'id',
-    ]
-
-    filter_backends = [
-        filters.SearchFilter,
-        filters.OrderingFilter,
-        DjangoFilterBackend,
-    ]
 
 class category_view_set(viewsets.ModelViewSet):
     queryset = Category.objects.all()

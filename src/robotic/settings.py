@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'ckeditor',
-    'django_filters',    
     'blog',
 ]
 
@@ -154,8 +153,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'blog.pagination.StandardResultsSetPagination', 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
     ],
 }
