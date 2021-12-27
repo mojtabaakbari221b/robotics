@@ -1,33 +1,33 @@
 from rest_framework import viewsets
 from url_filter.integrations.drf import DjangoFilterBackend
 from .models import (
-Group,
-Category,
-Info,
-Contact,
-Organ,
-Standards,
-Product,
-News,
-Requirements,
+    Group,
+    Category,
+    Info,
+    Contact,
+    Organ,
+    Standards,
+    Product,
+    News,
+    Requirements,
 )
 from .serializers import (
-GroupSerializer,
-CategorySerializer,
-OrganSerializer,
-InfoSerializer,
-ContactSerializer,
-StandardsSerializer,
-ProductSerializer,
-NewsSerializer,
-RequirementsSerializer,
+    GroupSerializer,
+    CategorySerializer,
+    OrganSerializer,
+    InfoSerializer,
+    ContactSerializer,
+    StandardsSerializer,
+    ProductSerializer,
+    NewsSerializer,
+    RequirementsSerializer,
 )
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -35,7 +35,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -43,7 +43,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     queryset = Organ.objects.all()
     serializer_class = OrganSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -51,7 +51,7 @@ class InfoViewSet(viewsets.ModelViewSet):
     queryset = Info.objects.all()
     serializer_class = InfoSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -59,7 +59,7 @@ class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -67,7 +67,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
     queryset = Standards.objects.all()
     serializer_class = StandardsSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -75,7 +75,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -83,7 +83,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
 
@@ -91,6 +91,6 @@ class RequirementsViewSet(viewsets.ModelViewSet):
     queryset = Requirements.objects.all()
     serializer_class = RequirementsSerializer
     filter_backends = [
-            DjangoFilterBackend,
+        DjangoFilterBackend,
     ]
     filter_fields = '__all__'
