@@ -13,36 +13,37 @@ class CategorySerializer(serializers.ModelSerializer):
         model = models.Category
         fields = '__all__'
 
-class CompanySerializer(serializers.ModelSerializer):
+class OrganSerializer(serializers.ModelSerializer):
     group = GroupSerializer(many=True)
+    category = CategorySerializer(many=True)
 
     class Meta:
-        model = models.Company
+        model = models.Organ
         fields = '__all__'
 
 class InfoSerializer(serializers.ModelSerializer):
-    company = CompanySerializer()
+    company = OrganSerializer()
 
     class Meta:
         model = models.Info
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):
-    company = CompanySerializer()
+    company = OrganSerializer()
 
     class Meta:
         model = models.Contact
         fields = '__all__'
 
 class StandardsSerializer(serializers.ModelSerializer):
-    company = CompanySerializer()
+    company = OrganSerializer()
 
     class Meta:
         model = models.Standards
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    company = CompanySerializer()
+    company = OrganSerializer()
     category = CategorySerializer(many=True)
 
     class Meta:

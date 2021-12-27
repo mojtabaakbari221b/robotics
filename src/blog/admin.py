@@ -3,7 +3,7 @@ from . import models
 
 admin.site.register(models.Group)
 admin.site.register(models.Category)
-admin.site.register(models.Company)
+admin.site.register(models.Organ)
 admin.site.register(models.Info)
 admin.site.register(models.Contact)
 admin.site.register(models.Standards)

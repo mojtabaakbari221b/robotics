@@ -3,9 +3,9 @@ from url_filter.integrations.drf import DjangoFilterBackend
 from .models import (
 Group,
 Category,
-Company,
 Info,
 Contact,
+Organ,
 Standards,
 Product,
 News,
@@ -14,7 +14,7 @@ Requirements,
 from .serializers import (
 GroupSerializer,
 CategorySerializer,
-CompanySerializer,
+OrganSerializer,
 InfoSerializer,
 ContactSerializer,
 StandardsSerializer,
@@ -39,9 +39,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ]
     filter_fields = '__all__'
 
-class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+class OrganViewSet(viewsets.ModelViewSet):
+    queryset = Organ.objects.all()
+    serializer_class = OrganSerializer
     filter_backends = [
             DjangoFilterBackend,
     ]
