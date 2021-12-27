@@ -14,7 +14,7 @@ router.register(r'category', views.CategoryViewSet, basename='category')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'company', views.OrganViewSet, basename='company')
+router.register(r'organ', views.OrganViewSet, basename='company')
 urlpatterns += router.urls
 
 router = DefaultRouter()
