@@ -6,37 +6,37 @@ urlpatterns = [
 
 
 router = DefaultRouter()
-router.register(r'group', views.group_view_set, basename='group')
+router.register(r'group', views.GroupViewSet, basename='group')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'category', views.category_view_set, basename='category')
+router.register(r'category', views.CategoryViewSet, basename='category')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'company', views.company_view_set, basename='company')
+router.register(r'company', views.CompanyViewSet, basename='company')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'info', views.info_view_set, basename='info')
+router.register(r'info', views.InfoViewSet, basename='info')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'contact', views.contact_view_set, basename='contact')
+router.register(r'contact', views.ContactViewSet, basename='contact')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'standards', views.standards_view_set, basename='standards')
+router.register(r'standards', views.StandardsViewSet, basename='standards')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'product', views.product_view_set, basename='product')
+router.register(r'product', views.ProductViewSet, basename='product')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'news', views.news_view_set, basename='news')
+router.register(r'news', views.NewsViewSet, basename='news')
 urlpatterns += router.urls
 
 router = DefaultRouter()
-router.register(r'requirements', views.requirements_view_set, basename='requirements')
+router.register(r'requirements', views.RequirementsViewSet, basename='requirements')
 urlpatterns += router.urls

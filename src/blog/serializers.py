@@ -7,7 +7,7 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
-    group = GroupSerializer(many=True)
+    group = GroupSerializer()
 
     class Meta:
         model = models.Category
@@ -46,15 +46,15 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True)
 
     class Meta:
-        model = models.Standards
+        model = models.Product
         fields = '__all__'
 
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Standards
+        model = models.News
         fields = '__all__'
 
 class RequirementsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Standards
+        model = models.Requirements
         fields = '__all__'
