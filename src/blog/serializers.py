@@ -14,9 +14,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrganSerializer(serializers.ModelSerializer):
-    group = GroupSerializer(many=True)
-    category = CategorySerializer(many=True)
-
     class Meta:
         model = models.Organ
         fields = '__all__'
