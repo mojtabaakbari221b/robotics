@@ -44,7 +44,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class OrganViewSet(viewsets.ModelViewSet):
-    queryset = Organ.objects.all()
+    queryset = Organ.objects.all().prefetch_related('gallery')
     serializer_class = OrganSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -76,7 +76,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all().prefetch_related('category').select_related('organ')
+    queryset = Product.objects.all().prefetch_related('category__group' , 'gallery').select_related('organ')
     serializer_class = ProductSerializer
     filter_backends = [
         DjangoFilterBackend,
