@@ -36,7 +36,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().prefetch_related('group')
+    queryset = Category.objects.all().select_related('group')
     serializer_class = CategorySerializer
     filter_backends = [
         DjangoFilterBackend,
