@@ -24,14 +24,14 @@ def compressImage(photo, name):
     return photo
 
 class Group(models.Model):
-    title = models.CharField(unique=True , max_length=512)
+    title = models.CharField(unique=True, null=False , max_length=512)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.title})'
 
 class Category(models.Model):
-    group = models.ForeignKey(Group , on_delete=models.CASCADE)
-    title = models.CharField(unique=True , max_length=512)
+    group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE)
+    title = models.CharField(unique=True, null=False , max_length=512)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.group.title} - {self.title})'
@@ -42,16 +42,14 @@ class Organ(models.Model):
         ('CO', 'Company'),
         ('LB', 'Labs'),
     )
-    name = RichTextField(max_length=256)
-    logo = models.ImageField(upload_to='organization/logo')
+    name = RichTextField(max_length=256, null=False)
+    logo = models.ImageField(upload_to='organization/logo', null=True , blank=True)
     ceo_management_name = RichTextField(max_length=128)
-    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo')
+    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False)
     date = models.DateField(default = now)
-    info = RichTextField(max_length=512)
-    activity_type = RichTextField(max_length=256)
-    group = models.ManyToManyField(Group)
-    category = models.ManyToManyField(Category)
-    tags = ArrayField(models.CharField(max_length=1024))
+    info = RichTextField(max_length=512, null=True , blank=True)
+    activity_type = RichTextField(max_length=256, null=True , blank=True)
+    tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO)
     is_promote = models.BooleanField(default=False)
 
@@ -60,25 +58,25 @@ class Organ(models.Model):
 
 class Info(models.Model):
     company = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company")
-    address = RichTextField(max_length=1024)
-    website = models.URLField(max_length=512)
-    established_year = models.DateField()
+    address = RichTextField(max_length=1024, null=True, blank=True)
+    website = models.URLField(max_length=512, null=True, blank=True)
+    established_year = models.DateField(null=True, blank=True)
     validation_of_knowledge_base = models.BooleanField(default=False)
-    introduction_of_a_company = RichTextField(max_length=2048)
+    introduction_of_a_company = RichTextField(max_length=2048, null=True, blank=True)
     number_of_staff = models.PositiveIntegerField(null=True)
-    file = models.FileField(upload_to='info/file')
+    file = models.FileField(upload_to='info/file', null=True, blank=True)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.company.name})'
 
 class Contact(models.Model):
     company = models.ForeignKey(Organ , on_delete=models.CASCADE)
-    interface_name = models.CharField(max_length=128)
-    interface_phone_number = models.CharField(max_length=18)
-    tel_channel = models.URLField(max_length=256)
-    fax = models.CharField(max_length=18)
-    email = models.EmailField(max_length=512)
-    phone_number = models.CharField(max_length=18)
+    interface_name = models.CharField(max_length=128, null=True, blank=True)
+    interface_phone_number = models.CharField(max_length=18, null=True, blank=True)
+    tel_channel = models.URLField(max_length=256, null=True, blank=True)
+    fax = models.CharField(max_length=18, null=True, blank=True)
+    email = models.EmailField(max_length=512, null=True, blank=True)
+    phone_number = models.CharField(max_length=18, null=True, blank=True)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.company.name})'
@@ -87,7 +85,7 @@ class Standards(models.Model):
     company = models.ForeignKey(Organ , on_delete=models.CASCADE)
     title = RichTextField(max_length=128)
     image = models.ImageField(upload_to='standard/image')
-    text = RichTextField(max_length=128)
+    text = RichTextField(max_length=128, null=True, blank=True)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.company.name})'
@@ -99,7 +97,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/image')
     company = models.ForeignKey(Organ, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
-    tags = ArrayField(models.CharField(max_length=1024))
+    tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True)
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
@@ -111,8 +109,8 @@ class News(models.Model):
     date_of_submission = models.DateField(default = now)
     text = RichTextField(max_length=2056)
     src = models.URLField(max_length=2056)
-    image = models.ImageField(upload_to='news/image', height_field=None, width_field=None)
-    media = models.FileField(upload_to='news/video')
+    image = models.ImageField(upload_to='news/image', height_field=None, width_field=None, null=True, blank=True)
+    media = models.FileField(upload_to='news/video', null=True, blank=True)
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
@@ -123,11 +121,11 @@ class Requirements(models.Model):
     title = RichTextField(max_length=256)
     text = RichTextField(max_length=2056)
     applicant_entity_name = RichTextField(max_length=256)
-    applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image')
-    image = models.ImageField(upload_to='requirements/image')
+    applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True)
+    image = models.ImageField(upload_to='requirements/image', null=True, blank=True)
     date_of_submission = models.DateField(default = now)
     deadline = models.DateField()
-    file = models.FileField(upload_to='requirements/file')
+    file = models.FileField(upload_to='requirements/file', null=True, blank=True)
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
@@ -135,11 +133,11 @@ class Requirements(models.Model):
 
 class SiteSupporter(models.Model):
     name = RichTextField(max_length=256)
-    text = RichTextField(max_length=2056)
+    text = RichTextField(max_length=2056, null=True, blank=True)
     image = models.ImageField(upload_to='supporter/image')
 
 class Page(models.Model):
-    title = RichTextField(max_length=256)
+    title = RichTextField(max_length=256, null=True, blank=True)
     text = RichTextField(max_length=4056)
     url = models.CharField(max_length=256)
 
