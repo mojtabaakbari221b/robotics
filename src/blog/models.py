@@ -116,7 +116,7 @@ class News(models.Model):
     title = RichTextField(max_length=256)
     date_of_submission = models.DateField(default = now)
     text = RichTextField(max_length=2056)
-    src = models.URLField(max_length=2056)
+    src = models.URLField(max_length=512, null=True, blank=True)
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension])
     is_promote = models.BooleanField(default=False)
 

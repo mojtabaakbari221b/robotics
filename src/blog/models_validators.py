@@ -56,6 +56,6 @@ def validate_media_extension(value):
     from django.core.exceptions import ValidationError
     ext = os.path.splitext(value.name)[1]
     if not ext.lower() in valid_extensions["img"] and ext.lower() not in valid_extensions["video"] :
-        raise ValidationError(f'unsupported file extension.\n\
-            your file extension should one of {valid_extensions["img"]}\n\
+        raise ValidationError(f'unsupported file extension.\
+            your file extension should one of {valid_extensions["img"]}\
             or {valid_extensions["video"]}')
