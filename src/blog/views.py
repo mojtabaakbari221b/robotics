@@ -36,7 +36,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().prefetch_related('group')
     serializer_class = CategorySerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -52,7 +52,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class InfoViewSet(viewsets.ModelViewSet):
-    queryset = Info.objects.all()
+    queryset = Info.objects.all().select_related('organ')
     serializer_class = InfoSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -60,7 +60,7 @@ class InfoViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all()
+    queryset = Contact.objects.all().select_related('organ')
     serializer_class = ContactSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -68,7 +68,7 @@ class ContactViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class StandardsViewSet(viewsets.ModelViewSet):
-    queryset = Standards.objects.all()
+    queryset = Standards.objects.all().select_related('organ')
     serializer_class = StandardsSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -76,7 +76,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().prefetch_related('category').select_related('organ')
     serializer_class = ProductSerializer
     filter_backends = [
         DjangoFilterBackend,

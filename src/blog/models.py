@@ -57,7 +57,7 @@ class Organ(models.Model):
         return f'{__class__.__name__}({self.id} , {self.name})'
 
 class Info(models.Model):
-    company = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company")
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company")
     address = RichTextField(max_length=1024, null=True, blank=True)
     website = models.URLField(max_length=512, null=True, blank=True)
     established_year = models.DateField(null=True, blank=True)
@@ -67,10 +67,10 @@ class Info(models.Model):
     file = models.FileField(upload_to='info/file', null=True, blank=True)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.company.name})'
+        return f'{__class__.__name__}({self.id} , {self.organ.name})'
 
 class Contact(models.Model):
-    company = models.ForeignKey(Organ , on_delete=models.CASCADE)
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE)
     interface_name = models.CharField(max_length=128, null=True, blank=True)
     interface_phone_number = models.CharField(max_length=18, null=True, blank=True)
     tel_channel = models.URLField(max_length=256, null=True, blank=True)
@@ -79,29 +79,29 @@ class Contact(models.Model):
     phone_number = models.CharField(max_length=18, null=True, blank=True)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.company.name})'
+        return f'{__class__.__name__}({self.id} , {self.organ.name})'
 
 class Standards(models.Model):
-    company = models.ForeignKey(Organ , on_delete=models.CASCADE)
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE)
     title = RichTextField(max_length=128)
     image = models.ImageField(upload_to='standard/image')
     text = RichTextField(max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.company.name})'
+        return f'{__class__.__name__}({self.id} , {self.organ.name})'
 
 class Product(models.Model):
     name = RichTextField(max_length=256)
     text = RichTextField(max_length=2056)
     date = models.DateField(default = now)
     image = models.ImageField(upload_to='product/image')
-    company = models.ForeignKey(Organ, on_delete=models.CASCADE)
+    organ = models.ForeignKey(Organ, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
     tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True)
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.company.name} - {self.name})'
+        return f'{__class__.__name__}({self.id} , {self.organ.name} - {self.name})'
 
 
 class News(models.Model):

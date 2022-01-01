@@ -19,28 +19,28 @@ class OrganSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InfoSerializer(serializers.ModelSerializer):
-    company = OrganSerializer()
+    organ = OrganSerializer()
 
     class Meta:
         model = models.Info
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):
-    company = OrganSerializer()
+    organ = OrganSerializer()
 
     class Meta:
         model = models.Contact
         fields = '__all__'
 
 class StandardsSerializer(serializers.ModelSerializer):
-    company = OrganSerializer()
+    organ = OrganSerializer()
 
     class Meta:
         model = models.Standards
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    company = OrganSerializer()
+    organ = OrganSerializer()
     category = CategorySerializer(many=True)
 
     class Meta:
