@@ -23,6 +23,9 @@ def compressImage(photo, name):
     photo = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
     return photo
 
+class Galery(models.Model):
+    media = models.FileField(upload_to='gallery/logo')
+
 class Group(models.Model):
     title = models.CharField(unique=True, null=False , max_length=512)
 
@@ -52,6 +55,7 @@ class Organ(models.Model):
     tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO)
     is_promote = models.BooleanField(default=False)
+    galley = models.ManyToManyField(Galery)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.name})'
@@ -99,6 +103,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
     tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True)
     is_promote = models.BooleanField(default=False)
+    galley = models.ManyToManyField(Galery)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.organ.name} - {self.name})'
@@ -140,8 +145,3 @@ class Page(models.Model):
     title = RichTextField(max_length=256, null=True, blank=True)
     text = RichTextField(max_length=4056)
     url = models.CharField(max_length=256)
-
-# ********************* # TODO # ********************* #
-
-# gallery for organ ?
-# gallery for product ?.
