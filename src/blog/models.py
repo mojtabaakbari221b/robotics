@@ -55,7 +55,7 @@ class Organ(models.Model):
     tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO)
     is_promote = models.BooleanField(default=False)
-    galley = models.ManyToManyField(Galery)
+    gallery = models.ManyToManyField(Galery)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.name})'
@@ -103,7 +103,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
     tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True)
     is_promote = models.BooleanField(default=False)
-    galley = models.ManyToManyField(Galery)
+    gallery = models.ManyToManyField(Galery)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.organ.name} - {self.name})'
