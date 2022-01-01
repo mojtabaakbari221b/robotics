@@ -3,16 +3,23 @@ from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField
 
-def compressImage(photo):
+def compressImage(photo, name):
+    import os
     from io import BytesIO
     import sys
     from PIL import Image
     from django.core.files.uploadedfile import InMemoryUploadedFile
-
     imageTemproary = Image.open(photo)
+    imageTemproary = imageTemproary.convert('RGB')
     outputIoStream = BytesIO()
+    if os.path.isfile(photo.path):
+        os.remove(photo.path)
+    if imageTemproary.width > 900 :
+        ratio = 900 / imageTemproary.width
+        imageTemproary = imageTemproary.resize( (int(imageTemproary.width * ratio) ,int(imageTemproary.height * ratio)) ) 
     imageTemproary.save(outputIoStream , format='JPEG', quality=70)
     outputIoStream.seek(0)
+    photo.name = name[0:80]
     photo = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
     return photo
 
@@ -46,7 +53,7 @@ class Organ(models.Model):
     category = models.ManyToManyField(Category)
     tags = ArrayField(models.CharField(max_length=1024))
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO)
-
+    is_promote = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.name})'
@@ -98,6 +105,7 @@ class Product(models.Model):
     company = models.ForeignKey(Organ, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
     tags = ArrayField(models.CharField(max_length=1024))
+    is_promote = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.company.name} - {self.name})'
@@ -110,6 +118,7 @@ class News(models.Model):
     src = models.URLField(max_length=2056)
     image = models.ImageField(upload_to='news/image', height_field=None, width_field=None)
     media = models.FileField(upload_to='news/video')
+    is_promote = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.title})'
@@ -124,15 +133,22 @@ class Requirements(models.Model):
     date_of_submission = models.DateField(default = now)
     deadline = models.DateField()
     file = models.FileField(upload_to='requirements/file')
+    is_promote = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.title})'
 
+class SiteSupporter(models.Model):
+    name = RichTextField(max_length=256)
+    text = RichTextField(max_length=2056)
+    image = models.ImageField(upload_to='supporter/image')
+
+class Page(models.Model):
+    title = RichTextField(max_length=256)
+    text = RichTextField(max_length=4056)
+    url = models.CharField(max_length=256)
+
 # ********************* # TODO # ********************* #
 
-# slideshow -- promote field for relations
-# hamian site
 # gallery for organ ?
-# N-M between product_image for product ?.
-# label for organ ?
-# contact us ?
+# gallery for product ?.
