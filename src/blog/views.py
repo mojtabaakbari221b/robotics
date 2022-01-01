@@ -10,6 +10,8 @@ from .models import (
     Product,
     News,
     Requirements,
+    SiteSupporter,
+    Page,
 )
 from .serializers import (
     GroupSerializer,
@@ -21,6 +23,8 @@ from .serializers import (
     ProductSerializer,
     NewsSerializer,
     RequirementsSerializer,
+    SiteSupporterSerializer,
+    PageSerializer,
 )
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -90,6 +94,23 @@ class NewsViewSet(viewsets.ModelViewSet):
 class RequirementsViewSet(viewsets.ModelViewSet):
     queryset = Requirements.objects.all()
     serializer_class = RequirementsSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+    filter_fields = '__all__'
+
+
+class SiteSupporterViewSet(viewsets.ModelViewSet):
+    queryset = SiteSupporter.objects.all()
+    serializer_class = SiteSupporterSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+    filter_fields = '__all__'
+
+class PageViewSet(viewsets.ModelViewSet):
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
     filter_backends = [
         DjangoFilterBackend,
     ]

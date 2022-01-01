@@ -59,3 +59,13 @@ class RequirementsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Requirements
         fields = '__all__'
+
+class SiteSupporterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SiteSupporter
+        fields = '__all__'
+
+class PageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Page
+        fields = '__all__'

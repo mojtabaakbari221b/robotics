@@ -58,11 +58,6 @@ class Organ(models.Model):
     def __str__(self):
         return f'{__class__.__name__}({self.id} , {self.name})'
 
-    # def save(self, *args, **kwargs):
-    #     if self.logo :
-    #         self.logo = compressImage(self.logo)
-    #     super(Company, self).save(*args, **kwargs)
-
 class Info(models.Model):
     company = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company")
     address = RichTextField(max_length=1024)
