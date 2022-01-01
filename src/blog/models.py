@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField
+from .models_validators import (
+    validate_media_extension,
+)
 
 def compressImage(photo, name):
     import os
@@ -24,7 +27,7 @@ def compressImage(photo, name):
     return photo
 
 class Galery(models.Model):
-    media = models.FileField(upload_to='gallery/logo')
+    media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension])
 
 class Group(models.Model):
     title = models.CharField(unique=True, null=False , max_length=512)
@@ -114,8 +117,7 @@ class News(models.Model):
     date_of_submission = models.DateField(default = now)
     text = RichTextField(max_length=2056)
     src = models.URLField(max_length=2056)
-    image = models.ImageField(upload_to='news/image', height_field=None, width_field=None, null=True, blank=True)
-    media = models.FileField(upload_to='news/video', null=True, blank=True)
+    media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension])
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
