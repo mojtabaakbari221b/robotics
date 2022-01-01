@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from . import models
 
+class GallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Galery
+        fields = '__all__'
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
@@ -14,6 +19,8 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrganSerializer(serializers.ModelSerializer):
+    gallery = GallerySerializer(many=True)
+
     class Meta:
         model = models.Organ
         fields = '__all__'
@@ -42,7 +49,8 @@ class StandardsSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     organ = OrganSerializer()
     category = CategorySerializer(many=True)
-
+    gallery = GallerySerializer(many=True)
+    
     class Meta:
         model = models.Product
         fields = '__all__'
