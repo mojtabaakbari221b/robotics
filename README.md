@@ -54,3 +54,104 @@
 /category/?group__str__in=<list_of_str>/
 /category/?group__str__icontains=<str>/
 ```
+
+##### ارتباط با مدل ارگان (شامل رباتها و ماشین ابزار کنترل عددی)
+
+* لیستی از همه ارگان ها
+```
+/organ/
+```
+
+* گرفتن یک ارگان خاص
+```
+/organ/<num:id>/
+/organ/?id=<num>/
+```
+
+* گرفتن یک ارگان با کتگوری خاص
+```
+/organ/?category__id=<int>/
+/organ/?category__id__in=<list_of_integer>
+```
+
+##### ارتباط با مدل درباره، تماس با ما و استاندارهای ارگان
+
+* گرفتن یک درباره با ما
+```
+/info/?organ__id=<int:id>
+```
+
+* گرفتن یک تماس با ما
+```
+/contact/?organ__id=<int:id>
+```
+
+* گرفتن یک استاندارها
+```
+/standard/?organ__id=<int:id>
+```
+
+#### ارتباط با مدل محصولات
+
+* لیستی از همه محصولات
+```
+/product/
+```
+
+* محصول خاص
+```
+/product/<num:id>/
+/product/?id=<num>/
+```
+
+#### ارتباط با مدل اخبار
+
+* لیستی از همه اخبار
+```
+/news/
+```
+
+* خبر خاص
+```
+/news/<num:id>/
+/news/?id=<num>/
+```
+
+#### ارتباط با مدل نیازمندیها
+
+* لیستی از همه نیازمندیها
+```
+/requirements/
+```
+
+* نیازمندی خاص
+```
+/requirements/<num:id>/
+/requirements/?id=<num>/
+```
+
+#### ارتباط با مدل حامیان سایت
+
+* لیستی از همه حامیان سایت
+```
+/site_supporter/
+```
+
+* حامی سایت خاص
+```
+/site_supporter/<num:id>/
+/site_supporter/?id=<num>/
+```
+
+#### با مدل صفحات
+
+* لیستی از همه صفحات
+```
+/site_supporter/
+```
+
+* صفحه خاص
+```
+/page/<num:id>/
+/page/?id=<num>/
+```
