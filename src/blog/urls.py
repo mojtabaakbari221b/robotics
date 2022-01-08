@@ -40,3 +40,11 @@ urlpatterns += router.urls
 router = DefaultRouter()
 router.register(r'requirements', views.RequirementsViewSet, basename='requirements')
 urlpatterns += router.urls
+
+router = DefaultRouter()
+router.register(r'site_supporter', views.SiteSupporter, basename='requirements')
+urlpatterns += router.urls
+
+router = DefaultRouter()
+router.register(r'page', views.Page, basename='requirements')
+urlpatterns += router.urls
