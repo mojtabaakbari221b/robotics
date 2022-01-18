@@ -147,12 +147,12 @@ class Product(models.Model):
         verbose_name_plural = "محصولات"
 
 class News(models.Model):
-    title = RichTextField(max_length=512)
-    date_of_submission = models.DateField(default = now)
-    text = RichTextField(max_length=2056)
-    src = models.URLField(max_length=512, null=True, blank=True)
-    media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension])
-    is_promote = models.BooleanField(default=False)
+    title = RichTextField(max_length=512, verbose_name="عنوان خبر")
+    date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
+    text = RichTextField(max_length=2056, verbose_name="متن خبر")
+    src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
+    media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
+    is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.title})'
@@ -162,15 +162,15 @@ class News(models.Model):
         verbose_name_plural = "اخبار"
 
 class Requirements(models.Model):
-    title = RichTextField(max_length=256)
-    text = RichTextField(max_length=2056)
-    applicant_entity_name = RichTextField(max_length=256)
-    applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True)
-    image = models.ImageField(upload_to='requirements/image', null=True, blank=True)
-    date_of_submission = models.DateField(default = now)
-    deadline = models.DateField()
-    file = models.FileField(upload_to='requirements/file', null=True, blank=True)
-    is_promote = models.BooleanField(default=False)
+    title = RichTextField(max_length=256, verbose_name="عنوان نیازمندی")
+    text = RichTextField(max_length=2056, verbose_name="متن نیازمندی")
+    applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
+    applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
+    image = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
+    date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")
+    deadline = models.DateField(verbose_name="تاریخ اتمام زمان نیازمندی")
+    file = models.FileField(upload_to='requirements/file', null=True, blank=True, verbose_name="فایل مربوط به نیازمندی")
+    is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.title})'
@@ -180,9 +180,9 @@ class Requirements(models.Model):
         verbose_name_plural = "نیازمندی ها"
 
 class SiteSupporter(models.Model):
-    name = RichTextField(max_length=512)
-    text = RichTextField(max_length=2056, null=True, blank=True)
-    image = models.ImageField(upload_to='supporter/image')
+    name = RichTextField(max_length=512, verbose_name="نام حامی سایت")
+    text = RichTextField(max_length=2056, null=True, blank=True, verbose_name="متن مربوطه")
+    image = models.ImageField(upload_to='supporter/image', verbose_name="عکس حامی سایت")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -192,9 +192,9 @@ class SiteSupporter(models.Model):
         verbose_name_plural = "حامیان سایت"
 
 class Page(models.Model):
-    title = RichTextField(max_length=256, null=True, blank=True)
-    text = RichTextField(max_length=4056)
-    url = models.CharField(max_length=256)
+    title = RichTextField(max_length=256, null=True, blank=True, verbose_name="عنوان صفحه")
+    text = RichTextField(max_length=4056, verbose_name="متنی که در صفحه قرار میگیرد")
+    url = models.CharField(max_length=256, verbose_name="آدرس صفحه چه چیزی باشد ؟")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.title})'
