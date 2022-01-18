@@ -42,6 +42,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -148,6 +149,7 @@ STATIC_ROOT = os.path.join(Path(BASE_DIR).resolve().parent, 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(Path(BASE_DIR).resolve().parent, 'media')
+print(MEDIA_ROOT)
 MEDIA_URL = '/media/'
 
 CKEDITOR_BASEPATH = os.path.join(STATIC_ROOT, '/static/ckeditor/ckeditor/')
@@ -163,4 +165,46 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+}
+
+# Admin pannel customization
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Robotics Admin",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Robotics",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Robotics",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to the Robotics Admin Pannel",
+
+    ############
+    # Top Menu #
+    ############
+
+    # Links to put along the top menu
+    "topmenu_links": [
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "blog"},
+
+        # external url that opens in a new window (Permissions can be added)
+        {"name": "Copyright", "url": "https://inolinx.com", "new_window": True},
+    ],
+
+    #############
+    # UI Tweaks #
+    #############
+    
+    # Whether to show the UI customizer on the sidebar
+    "show_ui_builder": True,
 }
