@@ -63,13 +63,13 @@ class Organ(models.Model):
         ('CO', 'Company'),
         ('LB', 'Labs'),
     )
-    name = RichTextField(max_length=256, null=False, verbose_name="نام ارگان")
+    name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
     logo = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
-    ceo_management_name = RichTextField(max_length=128, verbose_name="نام مدیر ارگان")
+    ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
     ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
     info = RichTextField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
-    activity_type = RichTextField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
+    activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
     tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True, verbose_name="تگ ها")
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
@@ -117,9 +117,9 @@ class Contact(models.Model):
 
 class Standards(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
-    title = RichTextField(max_length=128, verbose_name="عنوان")
+    title = models.CharField(max_length=128, verbose_name="عنوان")
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
-    text = RichTextField(max_length=128, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
+    text = RichTextField(max_length=1024, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
@@ -129,7 +129,7 @@ class Standards(models.Model):
         verbose_name_plural = "استاندارهای "
 
 class Product(models.Model):
-    name = RichTextField(max_length=256, verbose_name="نام محصول")
+    name = RichTextField(max_length=512, verbose_name="نام محصول")
     text = RichTextField(max_length=2056, verbose_name="متن مرتبط به محصول")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
@@ -147,7 +147,7 @@ class Product(models.Model):
         verbose_name_plural = "محصولات"
 
 class News(models.Model):
-    title = RichTextField(max_length=256)
+    title = RichTextField(max_length=512)
     date_of_submission = models.DateField(default = now)
     text = RichTextField(max_length=2056)
     src = models.URLField(max_length=512, null=True, blank=True)
@@ -180,7 +180,7 @@ class Requirements(models.Model):
         verbose_name_plural = "نیازمندی ها"
 
 class SiteSupporter(models.Model):
-    name = RichTextField(max_length=256)
+    name = RichTextField(max_length=512)
     text = RichTextField(max_length=2056, null=True, blank=True)
     image = models.ImageField(upload_to='supporter/image')
 
