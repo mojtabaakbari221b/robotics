@@ -27,20 +27,35 @@ def compressImage(photo, name):
     return photo
 
 class Galery(models.Model):
-    media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension])
+    media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
+
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id})'
+
+    class Meta: 
+        verbose_name = "گالری"
+        verbose_name_plural = "گالری ها"
 
 class Group(models.Model):
-    title = models.CharField(unique=True, null=False , max_length=512)
+    title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.title})'
+        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+
+    class Meta: 
+        verbose_name = "گروه"
+        verbose_name_plural = "گروه ها"
 
 class Category(models.Model):
-    group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE)
-    title = models.CharField(unique=True, null=False , max_length=512)
+    group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE, verbose_name="گروه")
+    title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.group.title} - {self.title})'
+        return f'{self._meta.verbose_name}({self.id} , {self.group.title} - {self.title})'
+
+    class Meta: 
+        verbose_name = "دسته بندی"
+        verbose_name_plural = "دسته بندی ها"
 
 class Organ(models.Model):
     CO = 'CO'
@@ -48,69 +63,88 @@ class Organ(models.Model):
         ('CO', 'Company'),
         ('LB', 'Labs'),
     )
-    name = RichTextField(max_length=256, null=False)
-    logo = models.ImageField(upload_to='organization/logo', null=True , blank=True)
-    ceo_management_name = RichTextField(max_length=128)
-    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False)
-    date = models.DateField(default = now)
-    info = RichTextField(max_length=512, null=True , blank=True)
-    activity_type = RichTextField(max_length=256, null=True , blank=True)
-    tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True)
-    type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO)
-    is_promote = models.BooleanField(default=False)
-    gallery = models.ManyToManyField(Galery)
+    name = RichTextField(max_length=256, null=False, verbose_name="نام ارگان")
+    logo = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
+    ceo_management_name = RichTextField(max_length=128, verbose_name="نام مدیر ارگان")
+    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
+    date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
+    info = RichTextField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
+    activity_type = RichTextField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
+    tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True, verbose_name="تگ ها")
+    type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
+    is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
+    gallery = models.ManyToManyField(Galery, verbose_name="گالری")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.name})'
+        return f'{self._meta.verbose_name}({self.id} , {self.name})'
+
+    class Meta: 
+        verbose_name = "ارگان"
+        verbose_name_plural = "ارگان ها"
 
 class Info(models.Model):
-    organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company")
-    address = RichTextField(max_length=1024, null=True, blank=True)
-    website = models.URLField(max_length=512, null=True, blank=True)
-    established_year = models.DateField(null=True, blank=True)
-    validation_of_knowledge_base = models.BooleanField(default=False)
-    introduction_of_a_company = RichTextField(max_length=2048, null=True, blank=True)
-    number_of_staff = models.PositiveIntegerField(null=True)
-    file = models.FileField(upload_to='info/file', null=True, blank=True)
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company", verbose_name="مرتبط به ارگان")
+    address = RichTextField(max_length=1024, null=True, blank=True, verbose_name="آدرس ارگان")
+    website = models.URLField(max_length=512, null=True, blank=True, verbose_name="وبسایت")
+    established_year = models.DateField(null=True, blank=True, verbose_name="سال تاسیس")
+    validation_of_knowledge_base = models.BooleanField(default=False, verbose_name="مورد تایید دانش بنیان؟")
+    introduction_of_a_company = RichTextField(max_length=2048, null=True, blank=True, verbose_name="درباره شرکت")
+    number_of_staff = models.PositiveIntegerField(null=True, verbose_name="تعداد کارمندان")
+    file = models.FileField(upload_to='info/file', null=True, blank=True, verbose_name="فایل مربوط")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.organ.name})'
+        return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
+
+    class Meta: 
+        verbose_name = "اطلاعات ارگان"
+        verbose_name_plural = "اطلاعات ارگان ها"
 
 class Contact(models.Model):
-    organ = models.ForeignKey(Organ , on_delete=models.CASCADE)
-    interface_name = models.CharField(max_length=128, null=True, blank=True)
-    interface_phone_number = models.CharField(max_length=18, null=True, blank=True)
-    tel_channel = models.URLField(max_length=256, null=True, blank=True)
-    fax = models.CharField(max_length=18, null=True, blank=True)
-    email = models.EmailField(max_length=512, null=True, blank=True)
-    phone_number = models.CharField(max_length=18, null=True, blank=True)
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
+    interface_name = models.CharField(max_length=128, null=True, blank=True, verbose_name="نام رابط")
+    interface_phone_number = models.CharField(max_length=18, null=True, blank=True, verbose_name="تصویر رابط")
+    tel_channel = models.URLField(max_length=256, null=True, blank=True, verbose_name="کانال تلگرام")
+    fax = models.CharField(max_length=18, null=True, blank=True, verbose_name="فکس")
+    email = models.EmailField(max_length=512, null=True, blank=True, verbose_name="ایمیل")
+    phone_number = models.CharField(max_length=18, null=True, blank=True, verbose_name="شماره همراه")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.organ.name})'
+        return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
+
+    class Meta: 
+        verbose_name = "تماس با ما"
+        verbose_name_plural = "مجموعه تماس با ما"
 
 class Standards(models.Model):
-    organ = models.ForeignKey(Organ , on_delete=models.CASCADE)
-    title = RichTextField(max_length=128)
-    image = models.ImageField(upload_to='standard/image')
-    text = RichTextField(max_length=128, null=True, blank=True)
+    organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
+    title = RichTextField(max_length=128, verbose_name="عنوان")
+    image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
+    text = RichTextField(max_length=128, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.organ.name})'
+        return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
+
+    class Meta: 
+        verbose_name = "استاندارها"
+        verbose_name_plural = "استاندارهای "
 
 class Product(models.Model):
-    name = RichTextField(max_length=256)
-    text = RichTextField(max_length=2056)
-    date = models.DateField(default = now)
-    image = models.ImageField(upload_to='product/image')
-    organ = models.ForeignKey(Organ, on_delete=models.CASCADE)
-    category = models.ManyToManyField(Category)
-    tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True)
-    is_promote = models.BooleanField(default=False)
-    gallery = models.ManyToManyField(Galery)
+    name = RichTextField(max_length=256, verbose_name="نام محصول")
+    text = RichTextField(max_length=2056, verbose_name="متن مرتبط به محصول")
+    date = models.DateField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
+    image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
+    organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
+    category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
+    tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True, verbose_name="تگ های محصول")
+    is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
+    gallery = models.ManyToManyField(Galery, verbose_name="گالری")
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.organ.name} - {self.name})'
+        return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'
 
+    class Meta: 
+        verbose_name = "محصول"
+        verbose_name_plural = "محصولات"
 
 class News(models.Model):
     title = RichTextField(max_length=256)
@@ -121,8 +155,11 @@ class News(models.Model):
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.title})'
-    
+        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+
+    class Meta: 
+        verbose_name = "خبر"
+        verbose_name_plural = "اخبار"
 
 class Requirements(models.Model):
     title = RichTextField(max_length=256)
@@ -136,14 +173,32 @@ class Requirements(models.Model):
     is_promote = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{__class__.__name__}({self.id} , {self.title})'
+        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+
+    class Meta: 
+        verbose_name = "نیازمندی"
+        verbose_name_plural = "نیازمندی ها"
 
 class SiteSupporter(models.Model):
     name = RichTextField(max_length=256)
     text = RichTextField(max_length=2056, null=True, blank=True)
     image = models.ImageField(upload_to='supporter/image')
 
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id} , {self.name})'
+
+    class Meta: 
+        verbose_name = "حامی سایت"
+        verbose_name_plural = "حامیان سایت"
+
 class Page(models.Model):
     title = RichTextField(max_length=256, null=True, blank=True)
     text = RichTextField(max_length=4056)
     url = models.CharField(max_length=256)
+
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+
+    class Meta: 
+        verbose_name = "صفحه شخصی شده"
+        verbose_name_plural = "مجموعه صفحات شخصی سازی شده"
