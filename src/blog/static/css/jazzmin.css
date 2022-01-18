@@ -1,0 +1,36 @@
+.content-wrapper,
+#jazzy-navbar {
+    margin-left: 0 !important;
+    margin-right: 250px;
+}
+
+
+/* 
+.card-body.table-responsive.p-0 tbody tr {
+    direction: ltr !important;
+} */
+
+.navbar-nav.ml-auto {
+    margin-left: 0 !important;
+    margin-right: auto;
+}
+
+.btn.btn-outline-success.float-right {
+    float: left !important;
+}
+
+#content-main .actions {
+    float: right;
+}
+
+div.text span {
+    float: right;
+}
+
+.field-__str__ a {
+    float: right;
+}
+
+.card-title {
+    float: right;
+}
