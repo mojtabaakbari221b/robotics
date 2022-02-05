@@ -36,6 +36,19 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG') == 'True'
 
+if env('PRODUCTION') == 'True' :
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    env_file = os.path.join(
+                BASE_DIR,
+                '.env.d',
+                '.prod.env'
+            )
+
+env = environ.Env()
+environ.Env.read_env(env_file=env_file)
+
 ALLOWED_HOSTS = []
 
 
@@ -128,8 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'fa'
+LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'UTC'
 

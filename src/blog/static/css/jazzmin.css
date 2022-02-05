@@ -55,6 +55,8 @@ body {
     font-family: Vazir !important;
 }
 
+
+/* 
 .content-wrapper,
 #jazzy-navbar,
 .main-footer {
@@ -77,7 +79,8 @@ body {
     direction: ltr !important;
 } */
 
-.navbar-nav.ml-auto {
+
+/* .navbar-nav.ml-auto {
     margin-left: 0 !important;
     margin-right: auto;
 }
@@ -112,3 +115,7 @@ div.text span,
 .cke_bottom {
     width: 100% !important;
 }
+
+.dataTables_info {
+    float: right;
+} */

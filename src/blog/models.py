@@ -102,7 +102,7 @@ class Info(models.Model):
 class Contact(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     interface_name = models.CharField(max_length=128, null=True, blank=True, verbose_name="نام رابط")
-    interface_phone_number = models.CharField(max_length=18, null=True, blank=True, verbose_name="تصویر رابط")
+    interface_phone_number = models.CharField(max_length=18, null=True, blank=True, verbose_name="شماره همراه رابط")
     tel_channel = models.URLField(max_length=256, null=True, blank=True, verbose_name="کانال تلگرام")
     fax = models.CharField(max_length=18, null=True, blank=True, verbose_name="فکس")
     email = models.EmailField(max_length=512, null=True, blank=True, verbose_name="ایمیل")
@@ -126,7 +126,7 @@ class Standards(models.Model):
 
     class Meta: 
         verbose_name = "استاندارها"
-        verbose_name_plural = "استاندارهای "
+        verbose_name_plural = "استاندارهای ارگان ها "
 
 class Product(models.Model):
     name = RichTextField(max_length=512, verbose_name="نام محصول")
