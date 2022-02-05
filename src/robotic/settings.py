@@ -49,7 +49,9 @@ if env('PRODUCTION') == 'True' :
 env = environ.Env()
 environ.Env.read_env(env_file=env_file)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*',
+]
 
 
 # Application definition

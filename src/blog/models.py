@@ -1,7 +1,7 @@
+from pydoc import describe
 from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
-from django.contrib.postgres.fields import ArrayField
 from .models_validators import (
     validate_media_extension,
 )
@@ -28,6 +28,7 @@ def compressImage(photo, name):
 
 class Galery(models.Model):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
+    describe = RichTextField(null=True , blank=True, verbose_name="توضیح گالری")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id})'
@@ -45,6 +46,9 @@ class Group(models.Model):
     class Meta: 
         verbose_name = "گروه"
         verbose_name_plural = "گروه ها"
+
+class Tag(models.Model):
+    title = RichTextField(null=False, blank=True, verbose_name="عنوان تگ")
 
 class Category(models.Model):
     group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE, verbose_name="گروه")
@@ -70,7 +74,7 @@ class Organ(models.Model):
     date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
     info = RichTextField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
     activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
-    tags = ArrayField(models.CharField(max_length=1024), null=True , blank=True, verbose_name="تگ ها")
+    tags = models.ManyToManyField(Tag, verbose_name="تگ ها")
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری")
@@ -135,7 +139,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
-    tags = ArrayField(models.CharField(max_length=1024), null=True, blank=True, verbose_name="تگ های محصول")
+    tags = models.ManyToManyField(Tag, verbose_name="تگ ها")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری")
 
