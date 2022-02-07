@@ -1,9 +1,9 @@
-from pydoc import describe
 from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from .models_validators import (
     validate_media_extension,
+    validate_video_extension,
 )
 
 def compressImage(photo, name):
@@ -26,9 +26,22 @@ def compressImage(photo, name):
     photo = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
     return photo
 
+class File(models.Model):
+    file = models.FileField(upload_to='file', verbose_name="فایل")
+    describe = RichTextField(null=True , blank=True, verbose_name="توضیح فایل")
+
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id})'
+
+    class Meta: 
+        verbose_name = "فایل"
+        verbose_name_plural = "فایل ها"
+
 class Galery(models.Model):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
+    video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True)
     describe = RichTextField(null=True , blank=True, verbose_name="توضیح گالری")
+    is_video = models.BooleanField(default=False ,editable=False)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id})'
@@ -36,6 +49,18 @@ class Galery(models.Model):
     class Meta: 
         verbose_name = "گالری"
         verbose_name_plural = "گالری ها"
+    
+    # def save(self, *args, **kwargs):
+    #     from django.core.exceptions import ValidationError, FieldError
+    #     if self.media :
+    #         try :
+    #             validate_video_extension(self.media)
+    #             if self.video_poster == "" or self.video_poster is None :
+    #                 raise FieldError('وقتی ویدئو آپلود میکنید، باید پوستر ویدئو هم قرار دهید')
+    #             self.is_video = True
+    #         except ValidationError :
+    #             self.is_video = False
+    #     super().save(*args, **kwargs)
 
 class Group(models.Model):
     title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
@@ -49,6 +74,13 @@ class Group(models.Model):
 
 class Tag(models.Model):
     title = RichTextField(null=False, blank=True, verbose_name="عنوان تگ")
+
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id})'
+
+    class Meta: 
+        verbose_name = "تگ"
+        verbose_name_plural = "تگ ها"
 
 class Category(models.Model):
     group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE, verbose_name="گروه")
@@ -78,6 +110,7 @@ class Organ(models.Model):
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری")
+    files = models.ManyToManyField(File, verbose_name="فایل ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -142,6 +175,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری")
+    files = models.ManyToManyField(File, verbose_name="فایل ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'
@@ -157,6 +191,7 @@ class News(models.Model):
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
+    files = models.ManyToManyField(File, verbose_name="فایل ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.title})'

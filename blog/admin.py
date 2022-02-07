@@ -11,3 +11,6 @@ admin.site.register(models.Product)
 admin.site.register(models.News)
 admin.site.register(models.Requirements)
 admin.site.register(models.Galery)
+admin.site.register(models.File)
+admin.site.register(models.Tag)
+
