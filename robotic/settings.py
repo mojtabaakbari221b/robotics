@@ -51,6 +51,8 @@ environ.Env.read_env(env_file=env_file)
 
 ALLOWED_HOSTS = [
     '*',
+    # 'robomech.ir',
+    # 'www.robomech.ir',
 ]
 
 

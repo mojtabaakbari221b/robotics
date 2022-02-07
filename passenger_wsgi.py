@@ -1,1 +1,1 @@
-from src.robotic.wsgi import application
+from robotic.wsgi import application
