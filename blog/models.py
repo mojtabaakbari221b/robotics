@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from .models_validators import (
     validate_media_extension,
     validate_video_extension,
@@ -25,6 +27,11 @@ def compressImage(photo, name):
     photo.name = name[0:80]
     photo = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
     return photo
+
+class SlideShow(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
@@ -100,17 +107,17 @@ class Organ(models.Model):
         ('LB', 'Labs'),
     )
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
-    logo = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
+    image = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
     ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
     info = RichTextField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
     activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
-    tags = models.ManyToManyField(Tag, verbose_name="تگ ها")
+    tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
-    gallery = models.ManyToManyField(Galery, verbose_name="گالری")
-    files = models.ManyToManyField(File, verbose_name="فایل ها")
+    media = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
+    files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -118,6 +125,16 @@ class Organ(models.Model):
     class Meta: 
         verbose_name = "ارگان"
         verbose_name_plural = "ارگان ها"
+    
+    def save(self, *args, **kwargs):
+        type = ContentType.objects.get_for_model(Organ)
+        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
+        if self.is_promote :
+            if not slide_show.exists() :
+                SlideShow.objects.create(content_object=self)
+        elif slide_show.exists():             
+            slide_show.delete()
+        super(Organ , self).save(*args, **kwargs)
 
 class Info(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company", verbose_name="مرتبط به ارگان")
@@ -184,8 +201,18 @@ class Product(models.Model):
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
 
+    def save(self, *args, **kwargs):
+        type = ContentType.objects.get_for_model(Product)
+        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
+        if self.is_promote :
+            if not slide_show.exists() :
+                SlideShow.objects.create(content_object=self)
+        elif slide_show.exists():             
+            slide_show.delete()
+        super(Product , self).save(*args, **kwargs)
+
 class News(models.Model):
-    title = RichTextField(max_length=512, verbose_name="عنوان خبر")
+    name = RichTextField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
     text = RichTextField(max_length=2056, verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
@@ -194,14 +221,24 @@ class News(models.Model):
     files = models.ManyToManyField(File, verbose_name="فایل ها")
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+        return f'{self._meta.verbose_name}({self.id} , {self.name})'
 
     class Meta: 
         verbose_name = "خبر"
         verbose_name_plural = "اخبار"
 
+    def save(self, *args, **kwargs):
+        type = ContentType.objects.get_for_model(News)
+        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
+        if self.is_promote :
+            if not slide_show.exists() :
+                SlideShow.objects.create(content_object=self)
+        elif slide_show.exists():             
+            slide_show.delete()
+        super(News , self).save(*args, **kwargs)
+
 class Requirements(models.Model):
-    title = RichTextField(max_length=256, verbose_name="عنوان نیازمندی")
+    name = RichTextField(max_length=256, verbose_name="عنوان نیازمندی")
     text = RichTextField(max_length=2056, verbose_name="متن نیازمندی")
     applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
@@ -212,11 +249,21 @@ class Requirements(models.Model):
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+        return f'{self._meta.verbose_name}({self.id} , {self.name})'
 
     class Meta: 
         verbose_name = "نیازمندی"
         verbose_name_plural = "نیازمندی ها"
+
+    def save(self, *args, **kwargs):
+        type = ContentType.objects.get_for_model(Requirements)
+        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
+        if self.is_promote :
+            if not slide_show.exists() :
+                SlideShow.objects.create(content_object=self)
+        elif slide_show.exists():             
+            slide_show.delete()
+        super(Requirements , self).save(*args, **kwargs)
 
 class SiteSupporter(models.Model):
     name = RichTextField(max_length=512, verbose_name="نام حامی سایت")
