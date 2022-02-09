@@ -86,7 +86,7 @@ class Tag(models.Model):
     title = RichTextField(null=False, blank=True, verbose_name="عنوان تگ")
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id})'
+        return f'{self._meta.verbose_name}({self.id}, {self.title})'
 
     class Meta: 
         verbose_name = "تگ"
@@ -245,6 +245,7 @@ class News(models.Model):
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
+    tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
