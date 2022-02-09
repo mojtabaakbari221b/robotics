@@ -13,4 +13,4 @@ admin.site.register(models.Requirements)
 admin.site.register(models.Galery)
 admin.site.register(models.File)
 admin.site.register(models.Tag)
-
+admin.site.register(models.SlideShow)
