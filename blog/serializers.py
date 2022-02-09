@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from . import models
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tag
+        fields = '__all__'
+
 class GallerySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Galery
@@ -51,6 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True)
     gallery = GallerySerializer(many=True)
     standard = StandardsSerializer(many=True)
+    tag = TagSerializer(many=True)
     
     class Meta:
         model = models.Product
