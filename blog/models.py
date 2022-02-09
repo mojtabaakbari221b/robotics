@@ -156,7 +156,7 @@ class Info(models.Model):
     website = models.URLField(max_length=512, null=True, blank=True, verbose_name="وبسایت")
     established_year = models.DateField(null=True, blank=True, verbose_name="سال تاسیس")
     validation_of_knowledge_base = models.BooleanField(default=False, verbose_name="مورد تایید دانش بنیان؟")
-    introduction_of_a_company = RichTextField(max_length=2048, null=True, blank=True, verbose_name="درباره شرکت")
+    introduction_of_a_company = RichTextField(null=True, blank=True, verbose_name="درباره شرکت")
     number_of_staff = models.PositiveIntegerField(null=True, verbose_name="تعداد کارمندان")
     file = models.FileField(upload_to='info/file', null=True, blank=True, verbose_name="فایل مربوط")
 
@@ -187,7 +187,7 @@ class Standards(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     title = models.CharField(max_length=128, verbose_name="عنوان")
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
-    text = RichTextField(max_length=1024, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
+    text = RichTextField(null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
@@ -198,7 +198,7 @@ class Standards(models.Model):
 
 class Product(models.Model):
     name = RichTextField(max_length=512, verbose_name="نام محصول")
-    text = RichTextField(max_length=2056, verbose_name="متن مرتبط به محصول")
+    text = RichTextField(verbose_name="متن مرتبط به محصول")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
@@ -240,7 +240,7 @@ class Product(models.Model):
 class News(models.Model):
     name = RichTextField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
-    text = RichTextField(max_length=2056, verbose_name="متن خبر")
+    text = RichTextField(verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
@@ -276,7 +276,7 @@ class News(models.Model):
 
 class Requirements(models.Model):
     name = RichTextField(max_length=256, verbose_name="عنوان نیازمندی")
-    text = RichTextField(max_length=2056, verbose_name="متن نیازمندی")
+    text = RichTextField(verbose_name="متن نیازمندی")
     applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
     image = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
@@ -315,7 +315,7 @@ class Requirements(models.Model):
 
 class SiteSupporter(models.Model):
     name = RichTextField(max_length=512, verbose_name="نام حامی سایت")
-    text = RichTextField(max_length=2056, null=True, blank=True, verbose_name="متن مربوطه")
+    text = RichTextField(null=True, blank=True, verbose_name="متن مربوطه")
     image = models.ImageField(upload_to='supporter/image', verbose_name="عکس حامی سایت")
 
     def __str__(self):
@@ -327,7 +327,7 @@ class SiteSupporter(models.Model):
 
 class Page(models.Model):
     title = RichTextField(max_length=256, null=True, blank=True, verbose_name="عنوان صفحه")
-    text = RichTextField(max_length=4056, verbose_name="متنی که در صفحه قرار میگیرد")
+    text = RichTextField(verbose_name="متنی که در صفحه قرار میگیرد")
     url = models.CharField(max_length=256, verbose_name="آدرس صفحه چه چیزی باشد ؟")
 
     def __str__(self):
