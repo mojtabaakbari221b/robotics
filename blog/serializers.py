@@ -50,6 +50,7 @@ class ProductSerializer(serializers.ModelSerializer):
     organ = OrganSerializer()
     category = CategorySerializer(many=True)
     gallery = GallerySerializer(many=True)
+    standard = StandardsSerializer(many=True)
     
     class Meta:
         model = models.Product
@@ -74,3 +75,11 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Page
         fields = '__all__'
+
+class SlideShowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SlideShow
+        exclude = [
+            'id',
+            'content_type',
+        ]

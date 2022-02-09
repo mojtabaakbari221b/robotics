@@ -9,6 +9,7 @@ from .models import (
     Info,
     Contact,
     Organ,
+    SlideShow,
     Standards,
     Product,
     News,
@@ -28,7 +29,23 @@ from .serializers import (
     RequirementsSerializer,
     SiteSupporterSerializer,
     PageSerializer,
+    SlideShowSerializer,
 )
+
+class SlideShowViewSet(viewsets.ModelViewSet):
+    queryset = SlideShow.objects.all().order_by('-id')[:6]
+    serializer_class = SlideShowSerializer
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filter_fields = '__all__'
+    ordering_fields = '__all__'
+    ordering = '?'
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()

@@ -4,6 +4,11 @@ from rest_framework.routers import DefaultRouter
 urlpatterns = [
 ]
 
+
+router = DefaultRouter()
+router.register(r'slideshow', views.SlideShowViewSet, basename='slideshow')
+urlpatterns += router.urls
+
 router = DefaultRouter()
 router.register(r'group', views.GroupViewSet, basename='group')
 urlpatterns += router.urls

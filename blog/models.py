@@ -32,6 +32,9 @@ class SlideShow(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    title = models.TextField()
+    type = models.TextField()
+    media = models.FileField(upload_to='slideshow')
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
@@ -131,7 +134,18 @@ class Organ(models.Model):
         slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
         if self.is_promote :
             if not slide_show.exists() :
-                SlideShow.objects.create(content_object=self)
+                SlideShow.objects.create(
+                    content_object=self,
+                    title=self.name,
+                    media=self.image,
+                    type=self._meta.verbose_name,
+                )
+            else :
+                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
+                slide_show.title = self.name
+                slide_show.media = self.image
+                slide_show.type=self._meta.verbose_name
+                slide_show.save()
         elif slide_show.exists():             
             slide_show.delete()
         super(Organ , self).save(*args, **kwargs)
@@ -189,10 +203,11 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
-    tags = models.ManyToManyField(Tag, verbose_name="تگ ها")
+    tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
-    gallery = models.ManyToManyField(Galery, verbose_name="گالری")
-    files = models.ManyToManyField(File, verbose_name="فایل ها")
+    gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
+    files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
+    standard = models.ManyToManyField(Standards, verbose_name="استاندارد ها", blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'
@@ -206,7 +221,18 @@ class Product(models.Model):
         slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
         if self.is_promote :
             if not slide_show.exists() :
-                SlideShow.objects.create(content_object=self)
+                SlideShow.objects.create(
+                    content_object=self,
+                    title=self.name,
+                    media=self.image,
+                    type=self._meta.verbose_name,
+                )
+            else :
+                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
+                slide_show.title = self.name
+                slide_show.media = self.image
+                slide_show.type=self._meta.verbose_name
+                slide_show.save()
         elif slide_show.exists():             
             slide_show.delete()
         super(Product , self).save(*args, **kwargs)
@@ -232,7 +258,18 @@ class News(models.Model):
         slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
         if self.is_promote :
             if not slide_show.exists() :
-                SlideShow.objects.create(content_object=self)
+                SlideShow.objects.create(
+                    content_object=self,
+                    title=self.name,
+                    media=self.media,
+                    type=self._meta.verbose_name,
+                )
+            else :
+                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
+                slide_show.title = self.name
+                slide_show.media = self.media
+                slide_show.type=self._meta.verbose_name
+                slide_show.save()                   
         elif slide_show.exists():             
             slide_show.delete()
         super(News , self).save(*args, **kwargs)
@@ -260,8 +297,19 @@ class Requirements(models.Model):
         slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
         if self.is_promote :
             if not slide_show.exists() :
-                SlideShow.objects.create(content_object=self)
-        elif slide_show.exists():             
+                SlideShow.objects.create(
+                    content_object=self,
+                    title=self.name,
+                    media=self.image,
+                    type=self._meta.verbose_name,
+                )
+            else :
+                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
+                slide_show.title = self.name
+                slide_show.media = self.image
+                slide_show.type=self._meta.verbose_name
+                slide_show.save()                
+        elif slide_show.exists():
             slide_show.delete()
         super(Requirements , self).save(*args, **kwargs)
 
