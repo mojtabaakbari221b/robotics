@@ -1,5 +1,11 @@
+from importlib_metadata import files
 from rest_framework import serializers
 from . import models
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.File
+        fields = '__all__'
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +30,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrganSerializer(serializers.ModelSerializer):
-    gallery = GallerySerializer(many=True)
+    media = GallerySerializer(many=True)
+    tags = TagSerializer(many=True)
+    files = FileSerializer(many=True)
+    # date = serializers.DateTimeField(format="%s")
 
     class Meta:
         model = models.Organ
@@ -56,13 +65,16 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True)
     gallery = GallerySerializer(many=True)
     standard = StandardsSerializer(many=True)
-    tag = TagSerializer(many=True)
+    tags = TagSerializer(many=True)
+    files = FileSerializer(many=True)
     
     class Meta:
         model = models.Product
         fields = '__all__'
 
 class NewsSerializer(serializers.ModelSerializer):
+    files = FileSerializer(many=True)
+    tags = TagSerializer(many=True)
     class Meta:
         model = models.News
         fields = '__all__'

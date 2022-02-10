@@ -70,7 +70,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class OrganViewSet(viewsets.ModelViewSet):
-    queryset = Organ.objects.all().prefetch_related('gallery')
+    queryset = Organ.objects.all().prefetch_related('media', 'tags', 'files')
     serializer_class = OrganSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -114,7 +114,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all().prefetch_related('category__group' , 'gallery').select_related('organ')
+    queryset = Product.objects.all().prefetch_related('category__group' , 'gallery', 'files', 'tags', 'standard').select_related('organ')
     serializer_class = ProductSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -125,7 +125,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class NewsViewSet(viewsets.ModelViewSet):
-    queryset = News.objects.all()
+    queryset = News.objects.all().prefetch_related('files', 'tags')
     serializer_class = NewsSerializer
     filter_backends = [
         DjangoFilterBackend,

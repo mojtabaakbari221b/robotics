@@ -181,6 +181,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+    # if you want with milliseconds or
+    'DATETIME_FORMAT': '%s.%f', 
+    # # only with seconds
+    # 'DATETIME_FORMAT': '%s',
 }
 
 # Admin pannel customization

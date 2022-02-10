@@ -113,7 +113,7 @@ class Organ(models.Model):
     image = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
     ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
-    date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
+    date = models.DateTimeField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
     info = models.CharField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
     activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
@@ -154,7 +154,7 @@ class Info(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company", verbose_name="مرتبط به ارگان")
     address = RichTextField(max_length=1024, null=True, blank=True, verbose_name="آدرس ارگان")
     website = models.URLField(max_length=512, null=True, blank=True, verbose_name="وبسایت")
-    established_year = models.DateField(null=True, blank=True, verbose_name="سال تاسیس")
+    established_year = models.DateTimeField(null=True, blank=True, verbose_name="سال تاسیس")
     validation_of_knowledge_base = models.BooleanField(default=False, verbose_name="مورد تایید دانش بنیان؟")
     introduction_of_a_company = RichTextField(null=True, blank=True, verbose_name="درباره شرکت")
     number_of_staff = models.PositiveIntegerField(null=True, verbose_name="تعداد کارمندان")
@@ -199,7 +199,7 @@ class Standards(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
     text = RichTextField(verbose_name="متن مرتبط به محصول")
-    date = models.DateField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
+    date = models.DateTimeField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
@@ -239,7 +239,7 @@ class Product(models.Model):
 
 class News(models.Model):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
-    date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
+    date_of_submission = models.DateTimeField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
     text = RichTextField(verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
@@ -281,8 +281,8 @@ class Requirements(models.Model):
     applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
     image = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
-    date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")
-    deadline = models.DateField(verbose_name="تاریخ اتمام زمان نیازمندی")
+    date_of_submission = models.DateTimeField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")
+    deadline = models.DateTimeField(verbose_name="تاریخ اتمام زمان نیازمندی")
     file = models.FileField(upload_to='requirements/file', null=True, blank=True, verbose_name="فایل مربوط به نیازمندی")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
 
