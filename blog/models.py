@@ -38,7 +38,7 @@ class SlideShow(models.Model):
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
-    describe = RichTextField(null=True , blank=True, verbose_name="توضیح فایل")
+    describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح فایل")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id})'
@@ -50,7 +50,7 @@ class File(models.Model):
 class Galery(models.Model):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
     video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True)
-    describe = RichTextField(null=True , blank=True, verbose_name="توضیح گالری")
+    describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح گالری")
     is_video = models.BooleanField(default=False ,editable=False)
 
     def __str__(self):
@@ -83,7 +83,7 @@ class Group(models.Model):
         verbose_name_plural = "گروه ها"
 
 class Tag(models.Model):
-    title = RichTextField(null=False, blank=True, verbose_name="عنوان تگ")
+    title = models.CharField(max_length=4096, null=False, blank=True, verbose_name="عنوان تگ")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id}, {self.title})'
@@ -114,7 +114,7 @@ class Organ(models.Model):
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
     ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
-    info = RichTextField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
+    info = models.CharField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
     activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
@@ -187,7 +187,7 @@ class Standards(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     title = models.CharField(max_length=128, verbose_name="عنوان")
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
-    text = RichTextField(null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
+    text = models.CharField(max_length=500, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
@@ -197,7 +197,7 @@ class Standards(models.Model):
         verbose_name_plural = "استاندارهای ارگان ها "
 
 class Product(models.Model):
-    name = RichTextField(max_length=512, verbose_name="نام محصول")
+    name = models.CharField(max_length=512, verbose_name="نام محصول")
     text = RichTextField(verbose_name="متن مرتبط به محصول")
     date = models.DateField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
@@ -238,7 +238,7 @@ class Product(models.Model):
         super(Product , self).save(*args, **kwargs)
 
 class News(models.Model):
-    name = RichTextField(max_length=512, verbose_name="عنوان خبر")
+    name = models.CharField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = models.DateField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
     text = RichTextField(verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
@@ -276,7 +276,7 @@ class News(models.Model):
         super(News , self).save(*args, **kwargs)
 
 class Requirements(models.Model):
-    name = RichTextField(max_length=256, verbose_name="عنوان نیازمندی")
+    name = models.CharField(max_length=256, verbose_name="عنوان نیازمندی")
     text = RichTextField(verbose_name="متن نیازمندی")
     applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
