@@ -33,7 +33,6 @@ class OrganSerializer(serializers.ModelSerializer):
     media = GallerySerializer(many=True)
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
-    # date = serializers.DateTimeField(format="%s")
 
     class Meta:
         model = models.Organ

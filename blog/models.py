@@ -7,6 +7,8 @@ from .models_validators import (
     validate_media_extension,
     validate_video_extension,
 )
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 def compressImage(photo, name):
     import os
@@ -59,18 +61,6 @@ class Galery(models.Model):
     class Meta: 
         verbose_name = "گالری"
         verbose_name_plural = "گالری ها"
-    
-    # def save(self, *args, **kwargs):
-    #     from django.core.exceptions import ValidationError, FieldError
-    #     if self.media :
-    #         try :
-    #             validate_video_extension(self.media)
-    #             if self.video_poster == "" or self.video_poster is None :
-    #                 raise FieldError('وقتی ویدئو آپلود میکنید، باید پوستر ویدئو هم قرار دهید')
-    #             self.is_video = True
-    #         except ValidationError :
-    #             self.is_video = False
-    #     super().save(*args, **kwargs)
 
 class Group(models.Model):
     title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
@@ -110,7 +100,7 @@ class Organ(models.Model):
         ('LB', 'Labs'),
     )
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
-    image = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
+    media = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
     ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
     date = models.DateTimeField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
@@ -119,7 +109,7 @@ class Organ(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     type = models.CharField(max_length=2, choices=ORGAN_CHOICES, default=CO, verbose_name="نوع شرکت")
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
-    media = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
+    gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
 
     def __str__(self):
@@ -128,27 +118,7 @@ class Organ(models.Model):
     class Meta: 
         verbose_name = "ارگان"
         verbose_name_plural = "ارگان ها"
-    
-    def save(self, *args, **kwargs):
-        type = ContentType.objects.get_for_model(Organ)
-        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
-        if self.is_promote :
-            if not slide_show.exists() :
-                SlideShow.objects.create(
-                    content_object=self,
-                    title=self.name,
-                    media=self.image,
-                    type=self._meta.verbose_name,
-                )
-            else :
-                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
-                slide_show.title = self.name
-                slide_show.media = self.image
-                slide_show.type=self._meta.verbose_name
-                slide_show.save()
-        elif slide_show.exists():             
-            slide_show.delete()
-        super(Organ , self).save(*args, **kwargs)
+
 
 class Info(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company", verbose_name="مرتبط به ارگان")
@@ -200,7 +170,7 @@ class Product(models.Model):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
     text = RichTextField(verbose_name="متن مرتبط به محصول")
     date = models.DateTimeField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
-    image = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
+    media = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
@@ -215,27 +185,6 @@ class Product(models.Model):
     class Meta: 
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
-
-    def save(self, *args, **kwargs):
-        type = ContentType.objects.get_for_model(Product)
-        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
-        if self.is_promote :
-            if not slide_show.exists() :
-                SlideShow.objects.create(
-                    content_object=self,
-                    title=self.name,
-                    media=self.image,
-                    type=self._meta.verbose_name,
-                )
-            else :
-                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
-                slide_show.title = self.name
-                slide_show.media = self.image
-                slide_show.type=self._meta.verbose_name
-                slide_show.save()
-        elif slide_show.exists():             
-            slide_show.delete()
-        super(Product , self).save(*args, **kwargs)
 
 class News(models.Model):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
@@ -254,33 +203,12 @@ class News(models.Model):
         verbose_name = "خبر"
         verbose_name_plural = "اخبار"
 
-    def save(self, *args, **kwargs):
-        type = ContentType.objects.get_for_model(News)
-        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
-        if self.is_promote :
-            if not slide_show.exists() :
-                SlideShow.objects.create(
-                    content_object=self,
-                    title=self.name,
-                    media=self.media,
-                    type=self._meta.verbose_name,
-                )
-            else :
-                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
-                slide_show.title = self.name
-                slide_show.media = self.media
-                slide_show.type=self._meta.verbose_name
-                slide_show.save()                   
-        elif slide_show.exists():             
-            slide_show.delete()
-        super(News , self).save(*args, **kwargs)
-
 class Requirements(models.Model):
     name = models.CharField(max_length=256, verbose_name="عنوان نیازمندی")
     text = RichTextField(verbose_name="متن نیازمندی")
     applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
-    image = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
+    media = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
     date_of_submission = models.DateTimeField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")
     deadline = models.DateTimeField(verbose_name="تاریخ اتمام زمان نیازمندی")
     file = models.FileField(upload_to='requirements/file', null=True, blank=True, verbose_name="فایل مربوط به نیازمندی")
@@ -292,27 +220,6 @@ class Requirements(models.Model):
     class Meta: 
         verbose_name = "نیازمندی"
         verbose_name_plural = "نیازمندی ها"
-
-    def save(self, *args, **kwargs):
-        type = ContentType.objects.get_for_model(Requirements)
-        slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=self.id)
-        if self.is_promote :
-            if not slide_show.exists() :
-                SlideShow.objects.create(
-                    content_object=self,
-                    title=self.name,
-                    media=self.image,
-                    type=self._meta.verbose_name,
-                )
-            else :
-                slide_show = slide_show.get(content_type__pk=type.id, object_id=self.id)
-                slide_show.title = self.name
-                slide_show.media = self.image
-                slide_show.type=self._meta.verbose_name
-                slide_show.save()                
-        elif slide_show.exists():
-            slide_show.delete()
-        super(Requirements , self).save(*args, **kwargs)
 
 class SiteSupporter(models.Model):
     name = RichTextField(max_length=512, verbose_name="نام حامی سایت")
@@ -337,3 +244,34 @@ class Page(models.Model):
     class Meta: 
         verbose_name = "صفحه شخصی شده"
         verbose_name_plural = "مجموعه صفحات شخصی سازی شده"
+
+@receiver(post_save, sender=Requirements)
+@receiver(post_save, sender=News)
+@receiver(post_save, sender=Product)
+@receiver(post_save, sender=Organ)
+def save_signal(sender, instance, **kwargs):
+    model_dic = {
+        "news" : News,
+        "product" : Product,
+        "organ" : Organ,
+        "requirements" : Requirements,
+    }
+    model_name = instance._meta.object_name.lower()
+    type = ContentType.objects.get_for_model(model_dic.get(model_name))
+    slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=instance.id)
+    if instance.is_promote :
+        if not slide_show.exists() :
+            SlideShow.objects.create(
+                content_object=instance,
+                title=instance.name,
+                media=instance.media,
+                type=instance._meta.verbose_name,
+            )
+        else :
+            slide_show = slide_show.get(content_type__pk=type.id, object_id=instance.id)
+            slide_show.title = instance.name
+            slide_show.media = instance.media
+            slide_show.type=instance._meta.verbose_name
+            slide_show.save()                
+    elif slide_show.exists():
+        slide_show.delete()
