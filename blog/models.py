@@ -122,11 +122,11 @@ class Organ(models.Model):
 
 class Info(models.Model):
     organ = models.ForeignKey(Organ , on_delete=models.CASCADE , related_name="info_company", verbose_name="مرتبط به ارگان")
-    address = RichTextField(max_length=1024, null=True, blank=True, verbose_name="آدرس ارگان")
+    address = models.TextField(null=True, blank=True, verbose_name="آدرس ارگان")
     website = models.URLField(max_length=512, null=True, blank=True, verbose_name="وبسایت")
     established_year = models.DateTimeField(null=True, blank=True, verbose_name="سال تاسیس")
     validation_of_knowledge_base = models.BooleanField(default=False, verbose_name="مورد تایید دانش بنیان؟")
-    introduction_of_a_company = RichTextField(null=True, blank=True, verbose_name="درباره شرکت")
+    introduction_of_a_company = models.TextField(null=True, blank=True, verbose_name="درباره شرکت")
     number_of_staff = models.PositiveIntegerField(null=True, verbose_name="تعداد کارمندان")
     file = models.FileField(upload_to='info/file', null=True, blank=True, verbose_name="فایل مربوط")
 
