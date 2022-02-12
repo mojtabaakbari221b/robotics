@@ -206,7 +206,7 @@ class News(models.Model):
 class Requirements(models.Model):
     name = models.CharField(max_length=256, verbose_name="عنوان نیازمندی")
     text = RichTextField(verbose_name="متن نیازمندی")
-    applicant_entity_name = RichTextField(max_length=256, verbose_name="نام سازمان درخواست کننده")
+    applicant_entity_name = models.CharField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
     media = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
     date_of_submission = models.DateTimeField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")

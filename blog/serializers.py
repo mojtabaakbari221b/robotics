@@ -30,7 +30,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrganSerializer(serializers.ModelSerializer):
-    media = GallerySerializer(many=True)
+    gallery = GallerySerializer(many=True)
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
 
