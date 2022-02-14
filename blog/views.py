@@ -69,6 +69,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = '?'
 
+    def list(self, request, *args, **kwargs):
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data)
+    
 class OrganViewSet(viewsets.ModelViewSet):
     queryset = Organ.objects.prefetch_related('gallery', 'tags', 'files').all()
     serializer_class = OrganSerializer
