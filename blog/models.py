@@ -99,6 +99,7 @@ class Organ(models.Model):
         ('CO', 'Company'),
         ('LB', 'Labs'),
     )
+    banner = models.ImageField(upload_to='organization/banner', null=True , blank=True, verbose_name="بنر" )
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
     media = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")

@@ -55,7 +55,21 @@ body {
     font-family: Vazir !important;
 }
 
+.cke_1 {
+    width: auto !important;
+}
+.selection>span>ul>li>* {
+    color: rgb(71, 71, 71) !important;
+}
 
+.select2-selection__choice__remove {
+    margin-left: 0 !important;
+}
+
+.select2-container-default {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
 /* 
 .content-wrapper,
 #jazzy-navbar,
