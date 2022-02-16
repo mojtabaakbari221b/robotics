@@ -32,6 +32,7 @@ class OrganSerializer(serializers.ModelSerializer):
     gallery = GallerySerializer(many=True)
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
+    category = CategorySerializer(many=True)
 
     class Meta:
         model = models.Organ
