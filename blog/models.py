@@ -112,7 +112,7 @@ class Organ(models.Model):
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
-    category = models.ManyToManyField(Category, blank=True, verbose_name="دسته بندی ها")
+    category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
