@@ -7,7 +7,7 @@ from .models_validators import (
     validate_media_extension,
     validate_video_extension,
 )
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 
 def compressImage(photo, name):
@@ -112,6 +112,7 @@ class Organ(models.Model):
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
+    category = models.ManyToManyField(Category, blank=True, verbose_name="دسته بندی ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -246,33 +247,27 @@ class Page(models.Model):
         verbose_name = "صفحه شخصی شده"
         verbose_name_plural = "مجموعه صفحات شخصی سازی شده"
 
+@receiver(m2m_changed, sender=Product.category.through)
+def add_Category_to_organ(sender, instance, *args,**kwargs):
+    products = Product.objects.filter(organ=instance.organ).values('id')
+    categories = Category.objects.filter(product__in=products).distinct()
+    instance.organ.category.set(categories)
+
 @receiver(post_save, sender=Requirements)
 @receiver(post_save, sender=News)
 @receiver(post_save, sender=Product)
 @receiver(post_save, sender=Organ)
-def save_signal(sender, instance, **kwargs):
-    model_dic = {
-        "news" : News,
-        "product" : Product,
-        "organ" : Organ,
-        "requirements" : Requirements,
-    }
-    model_name = instance._meta.object_name.lower()
-    type = ContentType.objects.get_for_model(model_dic.get(model_name))
-    slide_show = SlideShow.objects.filter(content_type__pk=type.id, object_id=instance.id)
+def add_promoter_to_slideshow(sender, instance, **kwargs):
+    type = ContentType.objects.get_for_model(sender)
+    slideshow_s = SlideShow.objects.filter(content_type__pk=type.id, object_id=instance.id)
     if instance.is_promote :
-        if not slide_show.exists() :
-            SlideShow.objects.create(
-                content_object=instance,
-                title=instance.name,
-                media=instance.media,
-                type=instance._meta.verbose_name,
-            )
-        else :
-            slide_show = slide_show.get(content_type__pk=type.id, object_id=instance.id)
-            slide_show.title = instance.name
-            slide_show.media = instance.media
-            slide_show.type=instance._meta.verbose_name
-            slide_show.save()                
-    elif slide_show.exists():
-        slide_show.delete()
+        slideshow_object = SlideShow.objects.get_or_create(
+            content_type=type,
+            object_id=instance.id
+        )[0]
+        slideshow_object.title = instance.name
+        slideshow_object.media = instance.media
+        slideshow_object.type = instance._meta.verbose_name
+        slideshow_object.save()     
+    elif slideshow_s.exists():
+        slideshow_s.delete()
