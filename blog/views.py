@@ -37,7 +37,7 @@ class SlideShowViewSet(viewsets.ModelViewSet):
     serializer_class = SlideShowSerializer
 
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by('-id')
     serializer_class = GroupSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -47,19 +47,12 @@ class GroupViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = '?'
 
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]
-    filter_fields = '__all__'
-    ordering_fields = '__all__'
-    ordering = '?'
+    def list(self, request, *args, **kwargs):
+       serializer = self.serializer_class(self.queryset, many=True)
+       return Response(data=serializer.data)
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().select_related('group')
+    queryset = Category.objects.all().select_related('group').order_by('-id')
     serializer_class = CategorySerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -72,7 +65,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.queryset, many=True)
         return Response(serializer.data)
-    
+
 class OrganViewSet(viewsets.ModelViewSet):
     queryset = Organ.objects.prefetch_related('gallery', 'tags', 'files', 'category__group').all()
     serializer_class = OrganSerializer
