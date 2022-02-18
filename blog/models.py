@@ -62,7 +62,7 @@ class Galery(models.Model):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
     video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
     describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح گالری")
-    is_video = models.BooleanField(default=False)
+    is_video = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id}, {self.describe})'
@@ -122,7 +122,7 @@ class Organ(models.Model):
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
-    standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards')
+    standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards', verbose_name="استاندارد ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -171,6 +171,13 @@ class Standards(models.Model):
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
     text = models.CharField(max_length=500, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
 
+    def __str__(self):
+        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+
+    class Meta: 
+        verbose_name = "استاندارد"
+        verbose_name_plural = "استانداردها"
+
 class Product(models.Model):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
     text = RichTextField(verbose_name="متن مرتبط به محصول")
@@ -200,7 +207,7 @@ class News(models.Model):
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
-    is_video = models.BooleanField(default=False)
+    is_video = models.BooleanField(default=False, editable=False)
     video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
 
     def __str__(self):
