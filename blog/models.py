@@ -1,3 +1,4 @@
+from re import L
 from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
@@ -7,7 +8,11 @@ from .models_validators import (
     validate_media_extension,
     validate_video_extension,
 )
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import (
+    post_save,
+    m2m_changed,
+    pre_save,
+)
 from django.dispatch import receiver
 
 def compressImage(photo, name):
@@ -36,14 +41,15 @@ class SlideShow(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
     title = models.TextField()
     type = models.TextField()
-    media = models.FileField(upload_to='slideshow')
+    media = models.FileField(upload_to='slideshow', blank=True)
+    is_video = models.BooleanField(default=False)
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
     describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح فایل")
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id})'
+        return f'{self._meta.verbose_name}({self.id}, {self.describe})'
 
     class Meta: 
         verbose_name = "فایل"
@@ -51,12 +57,12 @@ class File(models.Model):
 
 class Galery(models.Model):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
-    video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True)
+    video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
     describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح گالری")
-    is_video = models.BooleanField(default=False ,editable=False)
+    is_video = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id})'
+        return f'{self._meta.verbose_name}({self.id}, {self.describe})'
 
     class Meta: 
         verbose_name = "گالری"
@@ -197,6 +203,7 @@ class News(models.Model):
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
+    is_video = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -253,6 +260,16 @@ def add_Category_to_organ(sender, instance, *args,**kwargs):
     categories = Category.objects.filter(product__in=products).distinct()
     instance.organ.category.set(categories)
 
+@receiver(pre_save, sender=News)
+@receiver(pre_save, sender=Galery)
+def edit_is_video_filed_in_instance_before_save(sender, instance, **kwargs):
+    if instance.media != "" and instance.media is not None :
+        try :
+            validate_video_extension(instance.media)
+            instance.is_video = True
+        except :
+            instance.is_video = False
+
 @receiver(post_save, sender=Requirements)
 @receiver(post_save, sender=News)
 @receiver(post_save, sender=Product)
@@ -268,6 +285,9 @@ def add_promoter_to_slideshow(sender, instance, **kwargs):
         slideshow_object.title = instance.name
         slideshow_object.media = instance.media
         slideshow_object.type = instance._meta.verbose_name
-        slideshow_object.save()     
+        if sender == News :
+            slideshow_object.is_video = instance.is_video
+        slideshow_object.save()
     elif slideshow_s.exists():
         slideshow_s.delete()
+
