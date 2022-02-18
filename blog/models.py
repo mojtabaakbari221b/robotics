@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from re import L
 from django.db import models
 from django.utils.timezone import now
@@ -43,6 +44,8 @@ class SlideShow(models.Model):
     type = models.TextField()
     media = models.FileField(upload_to='slideshow', blank=True)
     is_video = models.BooleanField(default=False)
+    organ_type = models.CharField(max_length=2 , blank=True)
+    video_poster = models.ImageField(upload_to='slideshow/poster' , blank=True)
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
@@ -198,6 +201,7 @@ class News(models.Model):
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     is_video = models.BooleanField(default=False)
+    video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -281,6 +285,9 @@ def add_promoter_to_slideshow(sender, instance, **kwargs):
         slideshow_object.type = instance._meta.verbose_name
         if sender == News :
             slideshow_object.is_video = instance.is_video
+            slideshow_object.video_poster = instance.video_poster
+        if sender == Organ :
+            slideshow_object.organ_type = instance.type
         slideshow_object.save()
     elif slideshow_s.exists():
         slideshow_s.delete()
