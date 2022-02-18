@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from . import models
 
+class StandardsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Standards
+        fields = '__all__'
+
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.File
@@ -33,6 +38,7 @@ class OrganSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
     category = CategorySerializer(many=True)
+    standards = StandardsSerializer(many=True)
 
     class Meta:
         model = models.Organ
@@ -50,13 +56,6 @@ class ContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Contact
-        fields = '__all__'
-
-class StandardsSerializer(serializers.ModelSerializer):
-    organ = OrganSerializer()
-
-    class Meta:
-        model = models.Standards
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):

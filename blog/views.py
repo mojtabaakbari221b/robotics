@@ -67,7 +67,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class OrganViewSet(viewsets.ModelViewSet):
-    queryset = Organ.objects.prefetch_related('gallery', 'tags', 'files', 'category__group').all()
+    queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category__group').all()
     serializer_class = OrganSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -100,7 +100,7 @@ class ContactViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class StandardsViewSet(viewsets.ModelViewSet):
-    queryset = Standards.objects.all().select_related('organ')
+    queryset = Standards.objects.all()
     serializer_class = StandardsSerializer
     filter_backends = [
         DjangoFilterBackend,

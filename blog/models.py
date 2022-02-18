@@ -119,6 +119,7 @@ class Organ(models.Model):
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
+    standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards')
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
@@ -163,17 +164,9 @@ class Contact(models.Model):
         verbose_name_plural = "مجموعه تماس با ما"
 
 class Standards(models.Model):
-    organ = models.ForeignKey(Organ , on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
     title = models.CharField(max_length=128, verbose_name="عنوان")
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
     text = models.CharField(max_length=500, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
-
-    def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
-
-    class Meta: 
-        verbose_name = "استاندارها"
-        verbose_name_plural = "استاندارهای ارگان ها "
 
 class Product(models.Model):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
