@@ -137,6 +137,7 @@ class Info(models.Model):
     introduction_of_a_company = models.TextField(null=True, blank=True, verbose_name="درباره شرکت")
     number_of_staff = models.PositiveIntegerField(null=True, verbose_name="تعداد کارمندان")
     file = models.FileField(upload_to='info/file', null=True, blank=True, verbose_name="فایل مربوط")
+    company_city = models.CharField(max_length=250,null=True, blank=True, verbose_name="شهر محل کار شرکت" )
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
