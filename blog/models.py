@@ -236,8 +236,7 @@ class Requirements(models.Model):
         verbose_name_plural = "نیازمندی ها"
 
 class SiteSupporter(models.Model):
-    name = RichTextField(max_length=512, verbose_name="نام حامی سایت")
-    text = RichTextField(null=True, blank=True, verbose_name="متن مربوطه")
+    name = models.CharField(max_length=512, verbose_name="نام حامی سایت")
     image = models.ImageField(upload_to='supporter/image', verbose_name="عکس حامی سایت")
 
     def __str__(self):
