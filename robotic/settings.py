@@ -35,16 +35,20 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG') == 'True'
+HOST_AND_DOMAIN = 'http://localhost:8000'
+
 
 if env('PRODUCTION') == 'True' :
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    HOST_AND_DOMAIN = 'https://robomech.ir'
 
     env_file = os.path.join(
                 BASE_DIR,
                 '.env.d',
                 '.prod.env'
             )
+
 
 env = environ.Env()
 environ.Env.read_env(env_file=env_file)
@@ -58,6 +62,8 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -66,6 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'debug_toolbar',
     'rest_framework',
     'ckeditor',
