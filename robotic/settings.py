@@ -41,7 +41,7 @@ HOST_AND_DOMAIN = 'http://localhost:8000'
 if env('PRODUCTION') == 'True' :
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    HOST_AND_DOMAIN = 'https://robomech.ir'
+    HOST_AND_DOMAIN = env('HOST_AND_DOMAIN')
 
     env_file = os.path.join(
                 BASE_DIR,
