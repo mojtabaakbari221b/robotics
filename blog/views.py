@@ -29,6 +29,7 @@ from .serializers import (
     RequirementsSerializer,
     SiteSupporterSerializer,
     SlideShowSerializer,
+    AboutUsSerializer,
 )
 
 class SlideShowViewSet(viewsets.ModelViewSet):
@@ -156,3 +157,12 @@ class SiteSupporterViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
     ordering_fields = '__all__'
     ordering = '?'
+
+class AboutUsViewSet(viewsets.ViewSet):
+    queryset = AboutUs.objects.all()
+    serializer_class = AboutUsSerializer
+
+    def list(self, request):
+       serializer = self.serializer_class(self.queryset.last(), many=False)
+       return Response(data=serializer.data)
+

@@ -94,3 +94,8 @@ class SlideShowSerializer(serializers.ModelSerializer):
             'id',
             'content_type',
         ]
+
+class AboutUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AboutUs
+        fields = '__all__'

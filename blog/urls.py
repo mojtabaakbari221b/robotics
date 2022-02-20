@@ -49,3 +49,6 @@ router = DefaultRouter()
 router.register(r'site_supporter', views.SiteSupporterViewSet, basename='site_supporter')
 urlpatterns += router.urls
 
+router = DefaultRouter()
+router.register(r'about_us', views.AboutUsViewSet, basename='about_us')
+urlpatterns += router.urls
