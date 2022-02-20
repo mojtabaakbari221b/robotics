@@ -15,7 +15,7 @@ from .models import (
     News,
     Requirements,
     SiteSupporter,
-    Page,
+    AboutUs,
 )
 from .serializers import (
     GroupSerializer,
@@ -28,7 +28,6 @@ from .serializers import (
     NewsSerializer,
     RequirementsSerializer,
     SiteSupporterSerializer,
-    PageSerializer,
     SlideShowSerializer,
 )
 
@@ -150,17 +149,6 @@ class RequirementsViewSet(viewsets.ModelViewSet):
 class SiteSupporterViewSet(viewsets.ModelViewSet):
     queryset = SiteSupporter.objects.all()
     serializer_class = SiteSupporterSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]
-    filter_fields = '__all__'
-    ordering_fields = '__all__'
-    ordering = '?'
-
-class PageViewSet(viewsets.ModelViewSet):
-    queryset = Page.objects.all()
-    serializer_class = PageSerializer
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,

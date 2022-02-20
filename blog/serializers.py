@@ -87,11 +87,6 @@ class SiteSupporterSerializer(serializers.ModelSerializer):
         model = models.SiteSupporter
         fields = '__all__'
 
-class PageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Page
-        fields = '__all__'
-
 class SlideShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SlideShow

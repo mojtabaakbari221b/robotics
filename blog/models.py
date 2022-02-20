@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from location_field.models.plain import PlainLocationField
 from .models_validators import (
     validate_media_extension,
     validate_video_extension,
@@ -264,17 +265,17 @@ class SiteSupporter(models.Model):
         verbose_name = "حامی سایت"
         verbose_name_plural = "حامیان سایت"
 
-class Page(models.Model):
-    title = RichTextField(max_length=256, null=True, blank=True, verbose_name="عنوان صفحه")
-    text = RichTextField(verbose_name="متنی که در صفحه قرار میگیرد")
-    url = models.CharField(max_length=256, verbose_name="آدرس صفحه چه چیزی باشد ؟")
-
-    def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.title})'
+class AboutUs(models.Model):
+    email = models.EmailField(verbose_name="ایمیل")
+    phone_number = models.CharField(max_length=18, verbose_name="شماره تلفن")
+    fax = models.TextField(verbose_name="فکس")
+    address = models.TextField(verbose_name="آدرس")
+    info = RichTextField(verbose_name="اطلاعات")
+    location = PlainLocationField(based_fields=['city'], zoom=13, verbose_name="مکان")
 
     class Meta: 
-        verbose_name = "صفحه شخصی شده"
-        verbose_name_plural = "مجموعه صفحات شخصی سازی شده"
+        verbose_name = "صفحه درباره ما"
+        verbose_name_plural = "درباره ما"
 
 @receiver(m2m_changed, sender=Product.category.through)
 def add_Category_to_organ(sender, instance, *args,**kwargs):

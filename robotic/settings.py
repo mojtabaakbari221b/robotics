@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'debug_toolbar',
     'rest_framework',
+    'location_field.apps.DefaultConfig',
     'ckeditor',
     'blog',
 ]
@@ -192,6 +193,11 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%s.%f', 
     # # only with seconds
     # 'DATETIME_FORMAT': '%s',
+}
+
+LOCATION_FIELD = {
+    'map.provider': 'openstreetmap',
+    'search.provider': 'nominatim',
 }
 
 # Admin pannel customization
