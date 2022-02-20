@@ -35,13 +35,12 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG') == 'True'
-HOST_AND_DOMAIN = 'http://localhost:8000'
+HOST_AND_DOMAIN = env('HOST_AND_DOMAIN')
 
 
 if env('PRODUCTION') == 'True' :
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    HOST_AND_DOMAIN = env('HOST_AND_DOMAIN')
 
     env_file = os.path.join(
                 BASE_DIR,
