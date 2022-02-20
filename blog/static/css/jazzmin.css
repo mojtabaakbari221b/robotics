@@ -133,3 +133,16 @@ div.text span,
 .dataTables_info {
     float: right;
 } */
+/* /api/admin/blog/aboutus/2/delete/ */
+/* /api/admin/blog/aboutus/2/history/ */
+
+.btn.btn-outline-success.float-right,
+.btn.btn-outline-danger.form-control,
+.btn.btn-block.btn-outline-secondary.btn-sm
+{
+    display: none;
+}
+
+div:has(.btn.btn-outline-success.float-right) {
+    background-color: red;
+}
