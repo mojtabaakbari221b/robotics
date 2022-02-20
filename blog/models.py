@@ -1,5 +1,3 @@
-from distutils.command.upload import upload
-from re import L
 from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
@@ -15,6 +13,8 @@ from django.db.models.signals import (
     pre_save,
 )
 from django.dispatch import receiver
+from django.utils.html import mark_safe
+from robotic.settings import HOST_AND_DOMAIN
 
 def compressImage(photo, name):
     import os
@@ -35,6 +35,20 @@ def compressImage(photo, name):
     photo.name = name[0:80]
     photo = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
     return photo
+
+class ImageFieldForPanelAdmin():
+    def return_image_url(self, image_field):
+        if image_field.name is None:
+            return "https://inolinx.com/assets/image/1.png" # default image
+        else :
+            return f"{HOST_AND_DOMAIN}/media/{image_field}"
+
+    def image_tag(self):
+        image_field = self.return_image_field()
+        image_url = self.return_image_url(image_field)
+        return mark_safe(f'<img src="{image_url}" width="150" height="150" />')
+    image_tag.short_description = 'تصویر'
+    image_tag.allow_tags = True
 
 class SlideShow(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -102,7 +116,7 @@ class Category(models.Model):
         verbose_name = "دسته بندی"
         verbose_name_plural = "دسته بندی ها"
 
-class Organ(models.Model):
+class Organ(models.Model, ImageFieldForPanelAdmin):
     CO = 'CO'
     ORGAN_CHOICES =(
         ('CO', 'Company'),
@@ -126,6 +140,10 @@ class Organ(models.Model):
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
+
+    def return_image_field(self) :
+        return self.media
+
 
     class Meta: 
         verbose_name = "ارگان"
