@@ -61,6 +61,7 @@ class SlideShow(models.Model):
     is_video = models.BooleanField(default=False)
     organ_type = models.CharField(max_length=2 , blank=True)
     video_poster = models.ImageField(upload_to='slideshow/poster' , blank=True)
+    organ_id = models.PositiveBigIntegerField(null=True)
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
@@ -319,6 +320,9 @@ def add_promoter_to_slideshow(sender, instance, **kwargs):
             slideshow_object.video_poster = instance.video_poster
         if sender == Organ :
             slideshow_object.organ_type = instance.type
+            slideshow_object.media = instance.banner
+        if sender == Product :
+            slideshow_object.organ_id = instance.organ.id
         slideshow_object.save()
     elif slideshow_s.exists():
         slideshow_s.delete()
