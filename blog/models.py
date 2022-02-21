@@ -272,6 +272,12 @@ class AboutUs(models.Model):
     address = models.TextField(verbose_name="آدرس")
     info = RichTextField(verbose_name="اطلاعات")
     location = PlainLocationField(based_fields=['city'], zoom=13, verbose_name="مکان")
+    telegram_channel = models.URLField(blank=True)
+    whatsapp_channel = models.URLField(blank=True)
+    twitter_channel = models.URLField(blank=True)
+    instagram_channel = models.URLField(blank=True)
+    bale_channel = models.URLField(blank=True)
+    eata_channel = models.URLField(blank=True)
 
     class Meta: 
         verbose_name = "صفحه درباره ما"
