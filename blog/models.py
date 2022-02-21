@@ -323,6 +323,7 @@ def add_promoter_to_slideshow(sender, instance, **kwargs):
             slideshow_object.media = instance.banner
         if sender == Product :
             slideshow_object.organ_id = instance.organ.id
+            slideshow_object.organ_type = instance.organ.type
         slideshow_object.save()
     elif slideshow_s.exists():
         slideshow_s.delete()
