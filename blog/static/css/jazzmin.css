@@ -136,7 +136,7 @@ div.text span,
 /* /api/admin/blog/aboutus/2/delete/ */
 /* /api/admin/blog/aboutus/2/history/ */
 
-.btn.btn-outline-success.float-right,
+/* .btn.btn-outline-success.float-right,
 .btn.btn-outline-danger.form-control,
 .btn.btn-block.btn-outline-secondary.btn-sm
 {
@@ -145,4 +145,4 @@ div.text span,
 
 div:has(.btn.btn-outline-success.float-right) {
     background-color: red;
-}
+} */
