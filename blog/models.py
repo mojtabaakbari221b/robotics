@@ -123,6 +123,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     ORGAN_CHOICES =(
         ('CO', 'Company'),
         ('LB', 'Labs'),
+        ('SC', 'Services')
     )
     banner = models.ImageField(upload_to='organization/banner', null=True , blank=True, verbose_name="بنر" )
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
