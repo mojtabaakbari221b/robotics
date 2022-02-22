@@ -62,9 +62,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = '?'
 
+    from blog.decorator import filtering
+    @filtering
     def list(self, request, *args, **kwargs):
-        serializer = self.serializer_class(self.queryset, many=True)
-        return Response(serializer.data)
+        # serializer = self.serializer_class(self.queryset, many=True)
+        # return serializer.data
+        return self.queryset
 
 class OrganViewSet(viewsets.ModelViewSet):
     queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category__group').all()
