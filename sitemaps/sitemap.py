@@ -29,7 +29,7 @@ class StaticViewSitemap(Sitemap):
     
 
 class OrganSitemap(Sitemap):
-    queryset = OrganViewSet.queryset[0:10]
+    queryset = OrganViewSet.queryset.order_by('-id')[0:10]
     changefreq = "daily"
     priority = 1.0
 
@@ -40,7 +40,7 @@ class OrganSitemap(Sitemap):
         return f"/{organ_types_url.get(obj.type)}/{obj.id}"
 
 class ProductSitemap(Sitemap):
-    queryset = ProductViewSet.queryset[0:10]
+    queryset = ProductViewSet.queryset.order_by('-id')[0:10]
     changefreq = "daily"
     priority = 1.0
 
@@ -51,7 +51,7 @@ class ProductSitemap(Sitemap):
         return f"/{organ_types_url.get(obj.organ.type)}/{obj.organ.id}/product/{obj.id}"
 
 class NewsSitemap(Sitemap):
-    queryset = NewsViewSet.queryset[0:10]
+    queryset = NewsViewSet.queryset.order_by('-id')[0:10]
     changefreq = "daily"
     priority = 1.0
 
@@ -62,7 +62,7 @@ class NewsSitemap(Sitemap):
         return f"/news/{obj.id}"
 
 class RequiremetnsSitemap(Sitemap):
-    queryset = RequirementsViewSet.queryset[0:10]
+    queryset = RequirementsViewSet.queryset.order_by('-id')[0:10]
     changefreq = "daily"
     priority = 1.0
 
