@@ -115,7 +115,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.\
-        prefetch_related('category__group' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group')\
+        prefetch_related('category__group' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')\
             .all()
     # queryset = Product.objects.all()
     serializer_class = ProductSerializer
