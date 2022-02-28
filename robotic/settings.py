@@ -157,7 +157,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 # LANGUAGE_CODE = 'fa'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -191,7 +191,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     # if you want with milliseconds or
-    'DATETIME_FORMAT': '%s.%f', 
+    # 'DATETIME_FORMAT': '%s.%f', 
     # # only with seconds
     # 'DATETIME_FORMAT': '%s',
 }
