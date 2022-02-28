@@ -90,7 +90,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
     media = models.ImageField(upload_to='organization/logo', null=True , blank=True, verbose_name="لوگو")
     ceo_management_name = models.CharField(max_length=128, verbose_name="نام مدیر ارگان")
-    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=False , blank=False, verbose_name="تصویر مدیر ارگان")
+    ceo_management_image = models.ImageField(upload_to='organization/ceo_logo', null=True , blank=True, verbose_name="تصویر مدیر ارگان")
     date = models.DateTimeField(default = now, verbose_name="تاریخ ثبت شرکت در سایت")
     info = models.CharField(max_length=512, null=True , blank=True, verbose_name="توضیحی مختصر درباره شرکت")
     activity_type = models.CharField(max_length=256, null=True , blank=True, verbose_name="زمینه فعالیت")
