@@ -206,7 +206,7 @@ class Requirements(models.Model):
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
     media = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
     date_of_submission = models.DateTimeField(default = now, verbose_name="تاریخ ثبت نیازمندی در سایت")
-    deadline = models.DateTimeField(verbose_name="تاریخ اتمام زمان نیازمندی")
+    deadline = models.DateTimeField(null=True, blank=True, verbose_name="تاریخ اتمام زمان نیازمندی")
     file = models.FileField(upload_to='requirements/file', null=True, blank=True, verbose_name="فایل مربوط به نیازمندی")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
 
