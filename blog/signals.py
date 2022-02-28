@@ -3,6 +3,7 @@ from django.db.models.signals import (
     post_save,
     m2m_changed,
     pre_save,
+    post_delete,
 )
 from django.dispatch import receiver
 from .models_validators import (
@@ -48,6 +49,16 @@ def add_promoter_to_slideshow(sender, instance, **kwargs):
             slideshow_object.organ_type = instance.organ.type
         slideshow_object.save()
     elif slideshow_s.exists():
+        slideshow_s.delete()
+
+@receiver(post_delete, sender=Organ)
+@receiver(post_delete, sender=Requirements)
+@receiver(post_delete, sender=News)
+@receiver(post_delete, sender=Product)
+def remove_deleted_promote_entity_from_slideshow(sender, instance, **kwargs):
+    type = ContentType.objects.get_for_model(sender)
+    slideshow_s = SlideShow.objects.filter(content_type__pk=type.id, object_id=instance.id)
+    if instance.is_promote :
         slideshow_s.delete()
 
 @receiver(m2m_changed, sender=Product.category.through)
