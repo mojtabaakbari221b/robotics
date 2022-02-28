@@ -17,6 +17,16 @@ valid_extensions = {
         ".jpeg",
         ".jfif",
         ".webp",
+        ".apng",
+        ".avif",
+        ".gif",
+        ".pjpeg",
+        ".pjp",
+        ".svg",
+        ".webp",
+        ".tif",
+        ".tiff",
+        ".bmp"
     ] ,
     # "pdf" :[
     #     ".pdf",
