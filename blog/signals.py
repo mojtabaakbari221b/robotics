@@ -23,6 +23,15 @@ def edit_is_video_filed_in_instance_before_save(sender, instance, **kwargs):
         except :
             instance.is_video = False
 
+@receiver(post_save, sender=News)
+@receiver(post_save, sender=Galery)
+def compress_photo_if_news_or_gallery_media_its_photo(sender, instance, **kwargs):
+    if not instance.is_video :
+        compressImage([
+            instance.media,
+        ])
+
+
 @receiver(post_save, sender=Requirements)
 @receiver(post_save, sender=News)
 @receiver(post_save, sender=Product)
