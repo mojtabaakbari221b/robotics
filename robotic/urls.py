@@ -22,7 +22,6 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/blog/', include('blog.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 # sitemap configuration
@@ -40,3 +39,17 @@ urlpatterns += [
     path('sitemap.xml/', sitemaps_views.sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap')
 ]
+
+from .settings import DEBUG
+if DEBUG :
+    from .settings import MEDIA_URL, MEDIA_ROOT
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    
+    urlpatterns += [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ]
+
+    # Serve static and media files from development server
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
