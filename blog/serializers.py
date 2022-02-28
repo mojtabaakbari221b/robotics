@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from . import models
 
+class jDateSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance):
+        return str(instance.timestamp())
+
 class StandardsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Standards
@@ -39,6 +43,7 @@ class OrganSerializer(serializers.ModelSerializer):
     files = FileSerializer(many=True)
     category = CategorySerializer(many=True)
     standards = StandardsSerializer(many=True)
+    date = jDateSerializer()
 
     class Meta:
         model = models.Organ
@@ -46,6 +51,7 @@ class OrganSerializer(serializers.ModelSerializer):
 
 class InfoSerializer(serializers.ModelSerializer):
     organ = OrganSerializer()
+    established_year = jDateSerializer()
 
     class Meta:
         model = models.Info
@@ -65,6 +71,7 @@ class ProductSerializer(serializers.ModelSerializer):
     standard = StandardsSerializer(many=True)
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
+    date = jDateSerializer()
     
     class Meta:
         model = models.Product
@@ -73,11 +80,16 @@ class ProductSerializer(serializers.ModelSerializer):
 class NewsSerializer(serializers.ModelSerializer):
     files = FileSerializer(many=True)
     tags = TagSerializer(many=True)
+    date_of_submission = jDateSerializer()
+
     class Meta:
         model = models.News
         fields = '__all__'
 
 class RequirementsSerializer(serializers.ModelSerializer):
+    date_of_submission = jDateSerializer()
+    deadline = jDateSerializer()
+
     class Meta:
         model = models.Requirements
         fields = '__all__'
