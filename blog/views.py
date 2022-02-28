@@ -81,7 +81,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class InfoViewSet(viewsets.ModelViewSet):
-    queryset = Info.objects.all().select_related('organ')
+    queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')
     serializer_class = InfoSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -92,7 +92,7 @@ class InfoViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all().select_related('organ')
+    queryset = Contact.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')
     serializer_class = ContactSerializer
     filter_backends = [
         DjangoFilterBackend,
