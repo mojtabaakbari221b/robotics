@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django_jalali',
     'debug_toolbar',
     'rest_framework',
     'location_field.apps.DefaultConfig',
