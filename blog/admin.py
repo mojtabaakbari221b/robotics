@@ -1,11 +1,14 @@
 from django.contrib import admin
 from . import models
-from . import cutomise_admin
+from .cutomise_admin import (
+    OrganAdmin,
+    InfoAdmin,
+)
 
 admin.site.register(models.Group)
 admin.site.register(models.Category)
-admin.site.register(models.Organ, cutomise_admin.OrganAdmin)
-admin.site.register(models.Info)
+admin.site.register(models.Organ, OrganAdmin)
+admin.site.register(models.Info, InfoAdmin)
 admin.site.register(models.Contact)
 admin.site.register(models.Standards)
 admin.site.register(models.Product)

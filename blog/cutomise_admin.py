@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .forms import InfoAdminForm
 
 class OrganAdmin(admin.ModelAdmin):
     search_fields = (
@@ -14,3 +15,8 @@ class OrganAdmin(admin.ModelAdmin):
 
     # fields = '__all__'
     readonly_fields = ['image_tag']
+
+class InfoAdmin(admin.ModelAdmin):
+    form = InfoAdminForm
+
+    # pass
