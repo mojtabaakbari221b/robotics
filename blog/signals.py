@@ -61,6 +61,39 @@ def remove_deleted_promote_entity_from_slideshow(sender, instance, **kwargs):
     if instance.is_promote :
         slideshow_s.delete()
 
+@receiver(post_save, sender=Organ)
+def image_compressor_for_organ(sender, instance, **kwargs):
+    compressImage([
+        instance.banner,
+        instance.media,
+        instance.ceo_management_image,
+    ])
+
+@receiver(post_save, sender=Standards)
+def image_compressor_for_standard(sender, instance, **kwargs):
+    compressImage([
+        instance.image,
+    ])
+
+@receiver(post_save, sender=Product)
+def image_compressor_for_product(sender, instance, **kwargs):
+    compressImage([
+        instance.media,
+    ])
+
+@receiver(post_save, sender=Requirements)
+def image_compressor_for_requirements(sender, instance, **kwargs):
+    compressImage([
+        instance.applicant_entity_logo,
+        instance.media,
+    ])
+
+@receiver(post_save, sender=SiteSupporter)
+def image_compressor_for_sitesupporter(sender, instance, **kwargs):
+    compressImage([
+        instance.image,
+    ])
+
 @receiver(m2m_changed, sender=Product.category.through)
 def add_Category_to_organ(sender, instance, *args,**kwargs):
     products = Product.objects.filter(organ=instance.organ).values('id')
