@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
-from ckeditor.fields import RichTextField
+from django_quill.fields import QuillField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from location_field.models.plain import PlainLocationField
@@ -163,7 +163,7 @@ class Standards(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
-    text = RichTextField(verbose_name="متن مرتبط به محصول")
+    text = QuillField(verbose_name="متن مرتبط به محصول")
     date = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     media = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
@@ -184,7 +184,7 @@ class Product(models.Model):
 class News(models.Model):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
-    text = RichTextField(verbose_name="متن خبر")
+    text = QuillField(verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
@@ -202,7 +202,7 @@ class News(models.Model):
 
 class Requirements(models.Model):
     name = models.CharField(max_length=256, verbose_name="عنوان نیازمندی")
-    text = RichTextField(verbose_name="متن نیازمندی")
+    text = QuillField(verbose_name="متن نیازمندی")
     applicant_entity_name = models.CharField(max_length=256, verbose_name="نام سازمان درخواست کننده")
     applicant_entity_logo = models.ImageField(upload_to='requirements/applicant_entity_image', null=True, blank=True, verbose_name="لوگو سازمان درخواست کننده")
     media = models.ImageField(upload_to='requirements/image', null=True, blank=True, verbose_name="عکس مربوط به نیازمندی")
@@ -234,7 +234,7 @@ class AboutUs(models.Model):
     phone_number = models.CharField(max_length=18, verbose_name="شماره تلفن")
     fax = models.TextField(verbose_name="فکس")
     address = models.TextField(verbose_name="آدرس")
-    info = RichTextField(verbose_name="اطلاعات")
+    info = QuillField(verbose_name="اطلاعات")
     location = PlainLocationField(based_fields=['city'], zoom=13, verbose_name="مکان")
     telegram_channel = models.URLField(blank=True)
     whatsapp_channel = models.URLField(blank=True)

@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'location_field.apps.DefaultConfig',
-    'ckeditor',
+    'django_quill',
     'blog',
 ]
 
