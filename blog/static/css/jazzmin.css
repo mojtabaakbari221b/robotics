@@ -58,6 +58,7 @@ body {
 .cke_1 {
     width: auto !important;
 }
+
 .selection>span>ul>li>* {
     color: rgb(71, 71, 71) !important;
 }
@@ -69,6 +70,15 @@ body {
 .select2-container-default {
     padding-left: 5px !important;
     padding-right: 5px !important;
+}
+
+.django-quill-widget-container .select2 {
+    display: none !important;
+}
+
+#quill-id_text, #quill-id_info {
+    min-height: 200px;
+    font-family: Vazir !important;
 }
 /* 
 .content-wrapper,

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from django_quill.drf.fields import QuillHtmlField
 
 class jDateSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
@@ -72,6 +73,7 @@ class ProductSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     files = FileSerializer(many=True)
     date = jDateSerializer()
+    text = QuillHtmlField()
     
     class Meta:
         model = models.Product
@@ -81,6 +83,7 @@ class NewsSerializer(serializers.ModelSerializer):
     files = FileSerializer(many=True)
     tags = TagSerializer(many=True)
     date_of_submission = jDateSerializer()
+    text = QuillHtmlField()
 
     class Meta:
         model = models.News
@@ -89,6 +92,7 @@ class NewsSerializer(serializers.ModelSerializer):
 class RequirementsSerializer(serializers.ModelSerializer):
     date_of_submission = jDateSerializer()
     deadline = jDateSerializer()
+    text = QuillHtmlField()
 
     class Meta:
         model = models.Requirements
@@ -108,6 +112,8 @@ class SlideShowSerializer(serializers.ModelSerializer):
         ]
 
 class AboutUsSerializer(serializers.ModelSerializer):
+    info = QuillHtmlField()
+    
     class Meta:
         model = models.AboutUs
         fields = '__all__'
