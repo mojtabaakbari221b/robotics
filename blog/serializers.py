@@ -52,7 +52,6 @@ class OrganSerializer(serializers.ModelSerializer):
 
 class InfoSerializer(serializers.ModelSerializer):
     organ = OrganSerializer()
-    established_year = jDateSerializer()
 
     class Meta:
         model = models.Info

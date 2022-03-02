@@ -1,3 +1,4 @@
+from statistics import mode
 from django.db import models
 from django.utils.timezone import now
 from django_quill.fields import QuillField
@@ -124,7 +125,7 @@ class Info(models.Model):
     file = models.FileField(upload_to='info/file', null=True, blank=True, verbose_name="فایل مربوط")
     company_city = models.CharField(max_length=250,null=True, blank=True, verbose_name="شهر محل کار شرکت" )
 
-    established_year = jmodels.jDateField(null=True, blank=True, verbose_name="سال تاسیس")
+    established_year = models.CharField(max_length=12 ,null=True, blank=True, verbose_name="سال تاسیس")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name})'
