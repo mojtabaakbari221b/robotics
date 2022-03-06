@@ -53,3 +53,29 @@ if DEBUG :
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+
+# swagger
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from django.urls import re_path
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="robomech API",
+      default_version='v1.0',
+      description="design and developed by Hirkano",
+      terms_of_service="https://www.hirkano.ir/",
+   ),
+   public=True,
+   permission_classes=[
+       permissions.IsAuthenticated,
+       permissions.IsAdminUser,
+    ],
+)
+
+urlpatterns += [
+   re_path(r'^api/swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   re_path(r'^api/redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+]

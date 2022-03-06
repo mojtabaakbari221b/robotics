@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'location_field.apps.DefaultConfig',
     'django_quill',
     'blog',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
