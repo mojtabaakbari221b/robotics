@@ -7,14 +7,12 @@ class OrganAdmin(admin.ModelAdmin):
     )
 
     list_display = (
+        'id',
         'name',
         'type',
         'ceo_management_name',
         'image_tag',
     )
-
-    # fields = '__all__'
-    readonly_fields = ['image_tag']
 
 class InfoAdmin(admin.ModelAdmin):
     form = InfoAdminForm
@@ -28,6 +26,65 @@ class ProductAdmin(admin.ModelAdmin):
         'id',
         'name',
         'get_organ_value',
+        'image_tag',
+    )
+
+class StandardAdmin(admin.ModelAdmin):
+    search_fields = (
+        'title',
+    )
+
+    list_display = (
+        'id',
+        'title',
+        'text',
+        'image_tag',
+    )
+
+class SiteSupporterAdmin(admin.ModelAdmin):
+    search_fields = (
+        'name',
+    )
+
+    list_display = (
+        'id',
+        'name',
+        'image_tag',
+    )
+
+class RequirementsAdmin(admin.ModelAdmin):
+    search_fields = (
+        'name',
+    )
+
+    list_display = (
+        'id',
+        'name',
+        'image_tag',
+    )
+
+class GalleryAdmin(admin.ModelAdmin):
+    search_fields = (
+        'describe',
+    )
+
+    list_display = (
+        'id',
+        'describe',
+        'is_video',
+        'image_tag',
+    )
+
+class NewsAdmin(admin.ModelAdmin):
+    search_fields = (
+        'name',
+    )
+
+    list_display = (
+        'id',
+        'name',
+        'src',
+        'is_video',
         'image_tag',
     )
 

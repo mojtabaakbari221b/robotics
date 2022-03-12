@@ -80,6 +80,16 @@ body {
     min-height: 200px;
     font-family: Vazir !important;
 }
+
+.vLargeTextField.django-quill-widget-container {
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+#quill-id_text {
+    direction: rtl;
+}
+
 /* 
 .content-wrapper,
 #jazzy-navbar,

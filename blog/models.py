@@ -40,11 +40,11 @@ class File(models.Model):
         verbose_name = "فایل"
         verbose_name_plural = "فایل ها"
 
-class Galery(models.Model):
+class Galery(models.Model, ImageFieldForPanelAdmin):
     media = models.FileField(upload_to='gallery/logo', validators=[validate_media_extension], verbose_name="تصویر یا ویدئو")
     video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
     describe = models.CharField(max_length=500, null=True , blank=True, verbose_name="توضیح گالری")
-    is_video = models.BooleanField(default=False, editable=False)
+    is_video = models.BooleanField(default=False, editable=False, verbose_name="فرمت ویدئو دارد ؟")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id}, {self.describe})'
@@ -52,6 +52,11 @@ class Galery(models.Model):
     class Meta: 
         verbose_name = "گالری"
         verbose_name_plural = "گالری ها"
+
+    def return_image_field(self) :
+        if self.is_video :
+            return self.video_poster
+        return self.media
 
 class Group(models.Model):
     title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
@@ -154,7 +159,7 @@ class Contact(models.Model):
         verbose_name = "تماس با ما"
         verbose_name_plural = "مجموعه تماس با ما"
 
-class Standards(models.Model):
+class Standards(models.Model, ImageFieldForPanelAdmin):
     title = models.CharField(max_length=128, verbose_name="عنوان")
     image = models.ImageField(upload_to='standard/image', verbose_name="عکس استاندارد")
     text = models.CharField(max_length=500, null=True, blank=True, verbose_name="متن مرتبط به استاندارد")
@@ -165,6 +170,9 @@ class Standards(models.Model):
     class Meta: 
         verbose_name = "استاندارد"
         verbose_name_plural = "استانداردها"
+    
+    def return_image_field(self) :
+        return self.image
 
 class Product(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
@@ -193,7 +201,7 @@ class Product(models.Model, ImageFieldForPanelAdmin):
     def get_organ_value(self):
         return self.organ.name
 
-class News(models.Model):
+class News(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
     text = QuillField(verbose_name="متن خبر")
@@ -211,8 +219,13 @@ class News(models.Model):
     class Meta: 
         verbose_name = "خبر"
         verbose_name_plural = "اخبار"
+    
+    def return_image_field(self) :
+        if self.is_video :
+            return self.video_poster
+        return self.media
 
-class Requirements(models.Model):
+class Requirements(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=256, verbose_name="عنوان نیازمندی")
     text = QuillField(verbose_name="متن نیازمندی")
     applicant_entity_name = models.CharField(max_length=256, verbose_name="نام سازمان درخواست کننده")
@@ -230,7 +243,10 @@ class Requirements(models.Model):
         verbose_name = "نیازمندی"
         verbose_name_plural = "نیازمندی ها"
 
-class SiteSupporter(models.Model):
+    def return_image_field(self) :
+            return self.media
+
+class SiteSupporter(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=512, verbose_name="نام حامی سایت")
     image = models.ImageField(upload_to='supporter/image', verbose_name="عکس حامی سایت")
 
@@ -240,6 +256,9 @@ class SiteSupporter(models.Model):
     class Meta: 
         verbose_name = "حامی سایت"
         verbose_name_plural = "حامیان سایت"
+
+    def return_image_field(self) :
+            return self.image
 
 class AboutUs(models.Model):
     email = models.EmailField(verbose_name="ایمیل")
