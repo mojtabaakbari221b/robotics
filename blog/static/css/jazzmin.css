@@ -94,6 +94,10 @@ body {
     text-align: center;
 }
 
+.vTextField {
+    direction: rtl;
+}
+
 #quill-id_text {
     direction: rtl;
 }
