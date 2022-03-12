@@ -86,6 +86,14 @@ body {
     border: 0 !important;
 }
 
+.field-title {
+    direction: rtl;
+}
+
+#result_list {
+    text-align: center;
+}
+
 #quill-id_text {
     direction: rtl;
 }
