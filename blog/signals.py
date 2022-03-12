@@ -108,3 +108,13 @@ def add_Category_to_organ(sender, instance, *args,**kwargs):
     products = Product.objects.filter(organ=instance.organ).values('id')
     categories = Category.objects.filter(product__in=products).distinct()
     instance.organ.category.set(categories)
+
+@receiver(post_delete, sender=SlideShow)
+def remove_promote_from_content(sender, instance, *args,**kwargs):
+    content_type = ContentType.objects.get(app_label=instance.content_type.app_label, model=instance.content_type.model)
+    content_type = content_type.model_class()
+    object = content_type.objects.filter(id=instance.object_id)
+    if object.exists() :
+        object.update(
+            is_promote=False,
+        )

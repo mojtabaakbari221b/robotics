@@ -19,4 +19,32 @@ class OrganAdmin(admin.ModelAdmin):
 class InfoAdmin(admin.ModelAdmin):
     form = InfoAdminForm
 
-    # pass
+class ProductAdmin(admin.ModelAdmin):
+    search_fields = (
+        'name',
+    )
+
+    list_display = (
+        'id',
+        'name',
+        'get_organ_value',
+        'image_tag',
+    )
+
+
+class SlideShowAdmin(admin.ModelAdmin):
+    list_display = [
+        'type',
+        'object_id',
+        'title',
+    ]
+
+    readonly_fields = [
+        'type',
+        'object_id',
+        'title',
+    ]
+
+    exclude = [
+        'content_object',
+    ]

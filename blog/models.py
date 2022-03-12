@@ -1,10 +1,10 @@
-from statistics import mode
 from django.db import models
 from django.utils.timezone import now
 from django_quill.fields import QuillField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from location_field.models.plain import PlainLocationField
+from django.contrib.admin import display
 from .models_validators import (
     validate_media_extension,
 )
@@ -14,16 +14,20 @@ from common.utilities import (
 from django_jalali.db import models as jmodels
 
 class SlideShow(models.Model):
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, editable=False)
+    object_id = models.PositiveIntegerField(verbose_name="آیدی محتوا")
     content_object = GenericForeignKey('content_type', 'object_id')
-    title = models.TextField()
-    type = models.TextField()
-    media = models.FileField(upload_to='slideshow', blank=True)
-    is_video = models.BooleanField(default=False)
-    organ_type = models.CharField(max_length=2 , blank=True)
-    video_poster = models.ImageField(upload_to='slideshow/poster' , blank=True)
-    organ_id = models.PositiveBigIntegerField(null=True)
+    title = models.TextField(verbose_name="عنوان محتوا")
+    type = models.TextField(verbose_name="نوع محتوا")
+    media = models.FileField(upload_to='slideshow', blank=True, editable=False)
+    is_video = models.BooleanField(default=False, editable=False)
+    organ_type = models.CharField(max_length=2 , blank=True, editable=False)
+    video_poster = models.ImageField(upload_to='slideshow/poster' , blank=True, editable=False)
+    organ_id = models.PositiveBigIntegerField(null=True, editable=False)
+
+    class Meta: 
+        verbose_name = "اسلاید شو"
+        verbose_name_plural = "مجموعه اسلاید شو"
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
@@ -162,7 +166,7 @@ class Standards(models.Model):
         verbose_name = "استاندارد"
         verbose_name_plural = "استانداردها"
 
-class Product(models.Model):
+class Product(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=512, verbose_name="نام محصول")
     text = QuillField(verbose_name="متن مرتبط به محصول")
     date = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
@@ -181,6 +185,13 @@ class Product(models.Model):
     class Meta: 
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
+
+    def return_image_field(self) :
+            return self.media
+    
+    @display(description='مرتبط به ارگان')
+    def get_organ_value(self):
+        return self.organ.name
 
 class News(models.Model):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
