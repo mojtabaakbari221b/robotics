@@ -94,6 +94,7 @@ class SlideShowAdmin(admin.ModelAdmin):
         'type',
         'object_id',
         'title',
+        'is_video',
         'image_tag',
     ]
 

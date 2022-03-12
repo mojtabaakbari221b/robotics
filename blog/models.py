@@ -20,7 +20,7 @@ class SlideShow(models.Model, ImageFieldForPanelAdmin):
     title = models.TextField(verbose_name="عنوان محتوا")
     type = models.TextField(verbose_name="نوع محتوا")
     media = models.FileField(upload_to='slideshow', blank=True, editable=False)
-    is_video = models.BooleanField(default=False, editable=False)
+    is_video = models.BooleanField(default=False, editable=False, verbose_name="فرمت ویدئو دارد ؟")
     organ_type = models.CharField(max_length=2 , blank=True, editable=False)
     video_poster = models.ImageField(upload_to='slideshow/poster' , blank=True, editable=False)
     organ_id = models.PositiveBigIntegerField(null=True, editable=False)
@@ -215,7 +215,7 @@ class News(models.Model, ImageFieldForPanelAdmin):
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
-    is_video = models.BooleanField(default=False, editable=False)
+    is_video = models.BooleanField(default=False, editable=False, verbose_name="فرمت ویدئو دارد ؟")
     video_poster = models.ImageField(upload_to='gallery', verbose_name="پوستر ویدئو", null=True, blank=True, help_text="این فیلد موقعی استفاده میشود که یک ویدئو بارگزاری میکنید")
 
     def __str__(self):
