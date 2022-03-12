@@ -94,6 +94,7 @@ class SlideShowAdmin(admin.ModelAdmin):
         'type',
         'object_id',
         'title',
+        'image_tag',
     ]
 
     readonly_fields = [

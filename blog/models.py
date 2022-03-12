@@ -13,7 +13,7 @@ from common.utilities import (
 )
 from django_jalali.db import models as jmodels
 
-class SlideShow(models.Model):
+class SlideShow(models.Model, ImageFieldForPanelAdmin):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, editable=False)
     object_id = models.PositiveIntegerField(verbose_name="آیدی محتوا")
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -28,6 +28,11 @@ class SlideShow(models.Model):
     class Meta: 
         verbose_name = "اسلاید شو"
         verbose_name_plural = "مجموعه اسلاید شو"
+
+    def return_image_field(self) :
+        if self.is_video :
+            return self.video_poster
+        return self.media
 
 class File(models.Model):
     file = models.FileField(upload_to='file', verbose_name="فایل")
