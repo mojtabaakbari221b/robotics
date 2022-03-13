@@ -4,6 +4,7 @@ from django_quill.fields import QuillField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from location_field.models.plain import PlainLocationField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.admin import display
 from .models_validators import (
     validate_media_extension,
@@ -210,7 +211,8 @@ class Product(models.Model, ImageFieldForPanelAdmin):
 class News(models.Model, ImageFieldForPanelAdmin):
     name = models.CharField(max_length=512, verbose_name="عنوان خبر")
     date_of_submission = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت خبر در سایت")
-    text = QuillField(verbose_name="متن خبر")
+    # text = QuillField(verbose_name="متن خبر")
+    text = RichTextUploadingField(verbose_name="متن خبر")
     src = models.URLField(max_length=512, null=True, blank=True, verbose_name="لینک منبع خبر")
     media = models.FileField(upload_to='news/media', null=True, blank=True, validators=[validate_media_extension], verbose_name="عکس یا فیلم خبر")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")

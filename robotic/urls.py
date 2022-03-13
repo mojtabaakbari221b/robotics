@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/blog/', include('blog.urls')),
     path('api-auth/', include('rest_framework.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 # sitemap configuration
