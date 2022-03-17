@@ -64,7 +64,7 @@ class Galery(models.Model, ImageFieldForPanelAdmin):
         return self.media
 
 class Group(models.Model):
-    title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
+    title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.title})'
@@ -100,7 +100,6 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
         ('CO', 'Company'),
         ('LB', 'Labs'),
         ('SC', 'Services'),
-        ('PR', 'Printer'),
     )
     banner = models.ImageField(upload_to='organization/banner', null=True , blank=True, verbose_name="بنر" )
     name = models.CharField(max_length=256, null=False, verbose_name="نام ارگان")
@@ -117,6 +116,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
     standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards', verbose_name="استاندارد ها")
+    thumbnail = models.ImageField(upload_to='organization/banner_logo', null=True , blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'

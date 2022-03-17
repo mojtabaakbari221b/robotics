@@ -2,6 +2,7 @@ from this import d
 from rest_framework import viewsets
 from url_filter.integrations.drf import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from blog.decorator import filtering
 from rest_framework.response import Response
 from .models import (
     Group,
@@ -47,9 +48,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = '?'
 
+    @filtering
     def list(self, request, *args, **kwargs):
-       serializer = self.serializer_class(self.queryset, many=True)
-       return Response(data=serializer.data)
+        return self.queryset
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().select_related('group').order_by('-id')
@@ -62,7 +63,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = '?'
 
-    from blog.decorator import filtering
     @filtering
     def list(self, request, *args, **kwargs):
         # serializer = self.serializer_class(self.queryset, many=True)
