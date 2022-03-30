@@ -79,6 +79,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     filter_fields = '__all__'
     ordering_fields = '__all__'
     ordering = '?'
+    lookup_field = 'slug'
 
 class InfoViewSet(viewsets.ModelViewSet):
     queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')
