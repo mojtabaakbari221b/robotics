@@ -85,7 +85,7 @@ class Tag(models.Model):
 
 class Category(models.Model):
     group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE, verbose_name="گروه")
-    title = models.CharField(unique=True, null=False , max_length=512, verbose_name="عنوان")
+    title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.group.title} - {self.title})'
@@ -241,6 +241,11 @@ class Requirements(models.Model, ImageFieldForPanelAdmin):
     deadline = jmodels.jDateTimeField(null=True, blank=True, default = now, verbose_name="تاریخ اتمام نیازمندی")
     file = models.FileField(upload_to='requirements/file', null=True, blank=True, verbose_name="فایل مربوط به نیازمندی")
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
+    fax = models.TextField(blank=True, null=True)
+    email = models.EmailField(blank=True , null=True)
+    phone = models.TextField(null=True, blank=True)
+
+
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.name})'
