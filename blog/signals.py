@@ -121,5 +121,6 @@ def remove_promote_from_content(sender, instance, *args,**kwargs):
 
 @receiver(post_save, sender=Organ)
 def add_auto_id(sender, instance, *args,**kwargs):
-    if instance.slug and len(instance.slug) == 0 :
-        instance.slug = instance.id
+    if not instance.slug or len(instance.slug) == 0 :
+        instance.slug = str(instance.id)
+        instance.save()
