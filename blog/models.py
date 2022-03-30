@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.timezone import now
-import uuid
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from location_field.models.plain import PlainLocationField
@@ -121,7 +120,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     slug = models.TextField(unique=True, null=True, blank=True)
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.name})'
+        return f'{self._meta.verbose_name}({self.id}, {self.slug} , {self.name})'
 
     def return_image_field(self) :
         return self.media
