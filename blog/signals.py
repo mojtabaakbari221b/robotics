@@ -9,9 +9,6 @@ from django.dispatch import receiver
 from .models_validators import (
     validate_video_extension,
 )
-from common.utilities import (
-    compressImage,
-)
 
 @receiver(pre_save, sender=News)
 @receiver(pre_save, sender=Galery)
@@ -22,14 +19,6 @@ def edit_is_video_filed_in_instance_before_save(sender, instance, **kwargs):
             instance.is_video = True
         except :
             instance.is_video = False
-
-@receiver(post_save, sender=News)
-@receiver(post_save, sender=Galery)
-def compress_photo_if_news_or_gallery_media_its_photo(sender, instance, **kwargs):
-    if not instance.is_video :
-        compressImage([
-            instance.media,
-        ])
 
 
 @receiver(post_save, sender=Requirements)
@@ -69,39 +58,6 @@ def remove_deleted_promote_entity_from_slideshow(sender, instance, **kwargs):
     slideshow_s = SlideShow.objects.filter(content_type__pk=type.id, object_id=instance.id)
     if instance.is_promote :
         slideshow_s.delete()
-
-@receiver(post_save, sender=Organ)
-def image_compressor_for_organ(sender, instance, **kwargs):
-    compressImage([
-        instance.banner,
-        instance.media,
-        instance.ceo_management_image,
-    ])
-
-@receiver(post_save, sender=Standards)
-def image_compressor_for_standard(sender, instance, **kwargs):
-    compressImage([
-        instance.image,
-    ])
-
-@receiver(post_save, sender=Product)
-def image_compressor_for_product(sender, instance, **kwargs):
-    compressImage([
-        instance.media,
-    ])
-
-@receiver(post_save, sender=Requirements)
-def image_compressor_for_requirements(sender, instance, **kwargs):
-    compressImage([
-        instance.applicant_entity_logo,
-        instance.media,
-    ])
-
-@receiver(post_save, sender=SiteSupporter)
-def image_compressor_for_sitesupporter(sender, instance, **kwargs):
-    compressImage([
-        instance.image,
-    ])
 
 @receiver(m2m_changed, sender=Product.category.through)
 def add_Category_to_organ(sender, instance, *args,**kwargs):
