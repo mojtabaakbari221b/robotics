@@ -77,3 +77,19 @@ def validate_media_extension(value):
         raise ValidationError(f'unsupported file extension.\
             your file extension should one of {valid_extensions["img"]}\
             or {valid_extensions["video"]}')
+            
+def validate_tag(value):
+    import re
+    from django.core.exceptions import ValidationError
+    if re.match("^[\sA-Za-z0-9_-]*$", value):
+        return True
+    else :
+        raise ValidationError('string only contains letters, numbers, underscores, dash and spaces')
+
+def validate_slug(value):
+    import re
+    from django.core.exceptions import ValidationError
+    if re.match("^[A-Za-z0-9_-]*$", value):
+        return True
+    else :
+        raise ValidationError('string only contains letters, numbers, underscores and dash')

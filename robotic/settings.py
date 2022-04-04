@@ -183,6 +183,7 @@ MEDIA_URL = '/media/'
 
 CKEDITOR_BASEPATH = STATIC_URL + 'ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_RESTRICT_BY_USER = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

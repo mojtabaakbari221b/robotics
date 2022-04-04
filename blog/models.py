@@ -7,6 +7,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.admin import display
 from .models_validators import (
     validate_media_extension,
+    validate_slug,
+    validate_tag,
 )
 from common.utilities import (
     ImageFieldForPanelAdmin,
@@ -117,7 +119,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
     standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards', verbose_name="استاندارد ها")
     thumbnail = models.ImageField(upload_to='organization/banner_logo', null=True , blank=True)
-    slug = models.TextField(unique=True, null=True, blank=True)
+    slug = models.TextField(validators=[validate_slug,], unique=True, null=True, blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id}, {self.slug} , {self.name})'
