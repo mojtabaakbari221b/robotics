@@ -116,10 +116,11 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
-    category = models.ManyToManyField(Category,editable=False, blank=True, verbose_name="دسته بندی ها")
+    category = models.ManyToManyField(Category, editable=False, blank=True, verbose_name="دسته بندی ها")
     standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards', verbose_name="استاندارد ها")
     thumbnail = models.ImageField(upload_to='organization/banner_logo', null=True , blank=True)
     slug = models.TextField(validators=[validate_slug,], unique=True, null=True, blank=True)
+    group = models.ManyToManyField(Group, editable=False, blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id}, {self.slug} , {self.name})'
@@ -189,12 +190,13 @@ class Product(models.Model, ImageFieldForPanelAdmin):
     date = jmodels.jDateTimeField(default = now, verbose_name="تاریخ ثبت محصول در سایت")
     media = models.ImageField(upload_to='product/image', verbose_name="عکس اصلی محصول")
     organ = models.ForeignKey(Organ, on_delete=models.CASCADE, verbose_name="مرتبط به ارگان")
-    category = models.ManyToManyField(Category, verbose_name="دسته بندی محصول")
+    category = models.ManyToManyField(Category,blank=True, verbose_name="دسته بندی محصول")
     tags = models.ManyToManyField(Tag, verbose_name="تگ ها", blank=True)
     is_promote = models.BooleanField(default=False, verbose_name="ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     standard = models.ManyToManyField(Standards, verbose_name="استاندارد ها", blank=True)
+    group = models.ManyToManyField(Group, blank=True)
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'
