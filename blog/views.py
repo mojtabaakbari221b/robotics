@@ -172,17 +172,10 @@ class AboutUsViewSet(viewsets.ViewSet):
        serializer = self.serializer_class(self.queryset.last(), many=False)
        return Response(data=serializer.data)
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(viewsets.ViewSet):
     queryset = Tag.objects.all().order_by('-id')
     serializer_class = TagSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]
-    filter_fields = '__all__'
-    ordering_fields = '__all__'
-    ordering = '?'
 
-    @filtering
     def list(self, request, *args, **kwargs):
-        return self.queryset
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(data=serializer.data)

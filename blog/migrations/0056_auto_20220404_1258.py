@@ -11,21 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='requirements',
-            name='email',
-            field=models.EmailField(blank=True, max_length=254, null=True),
-        ),
-        migrations.AddField(
-            model_name='requirements',
-            name='fax',
-            field=models.TextField(blank=True, null=True),
-        ),
-        migrations.AddField(
-            model_name='requirements',
-            name='phone',
-            field=models.TextField(blank=True, null=True),
-        ),
         migrations.AlterField(
             model_name='tag',
             name='title',

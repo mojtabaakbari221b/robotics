@@ -1,10 +1,6 @@
 from . import views
 from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-]
-
-
 router = DefaultRouter()
 router.register(r'slideshow', views.SlideShowViewSet, basename='slideshow')
 router.register(r'group', views.GroupViewSet, basename='group')
@@ -19,4 +15,4 @@ router.register(r'news', views.NewsViewSet, basename='news')
 router.register(r'requirements', views.RequirementsViewSet, basename='requirements')
 router.register(r'site_supporter', views.SiteSupporterViewSet, basename='site_supporter')
 router.register(r'about_us', views.AboutUsViewSet, basename='about_us')
-urlpatterns += router.urls
+urlpatterns = router.urls
