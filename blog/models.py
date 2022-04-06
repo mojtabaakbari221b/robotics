@@ -195,7 +195,7 @@ class Product(models.Model, ImageFieldForPanelAdmin):
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     standard = models.ManyToManyField(Standards, verbose_name="استاندارد ها", blank=True)
-    group = models.ManyToManyField(Group, blank=True)
+    group = models.ManyToManyField(Group, blank=True, verbose_name="گروه ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'
