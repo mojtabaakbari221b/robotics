@@ -62,15 +62,15 @@ def remove_deleted_promote_entity_from_slideshow(sender, instance, **kwargs):
 @receiver(m2m_changed, sender=Product.group.through)
 def add_category_from_product_group_to_organ(sender, instance, *args,**kwargs):
     products = Product.objects.filter(organ=instance.organ).values('id')
-    tags = Tag.objects.filter(product__id__in=products).values('id')
-    categories = Category.objects.filter(tag__id__in=tags).distinct()
-    instance.organ.category.add(categories)
+    groups = Group.objects.filter(product__id__in=products).values('id')
+    categories = Category.objects.filter(group__in=groups).distinct()
+    instance.organ.category.add(*categories)
 
 @receiver(m2m_changed, sender=Product.category.through)
 def add_Category_to_organ(sender, instance, *args,**kwargs):
     products = Product.objects.filter(organ=instance.organ).values('id')
-    categories = Category.objects.filter(product__in=products).distinct()
-    instance.organ.category.add(categories)
+    categories = Category.objects.filter(product__id__in=products).distinct()
+    instance.organ.category.add(*categories)
 
 @receiver(post_delete, sender=SlideShow)
 def remove_promote_from_content(sender, instance, *args,**kwargs):
