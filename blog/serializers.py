@@ -111,3 +111,9 @@ class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AboutUs
         fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.Tag
+        fields = '__all__'
