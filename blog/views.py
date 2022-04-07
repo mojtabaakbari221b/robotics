@@ -1,6 +1,7 @@
 from this import d
 from rest_framework import viewsets
 from url_filter.integrations.drf import DjangoFilterBackend
+from .filters import ExcludeTagFilterBackend
 from rest_framework.filters import OrderingFilter
 from blog.decorator import filtering
 from rest_framework.response import Response
@@ -173,9 +174,19 @@ class AboutUsViewSet(viewsets.ViewSet):
        return Response(data=serializer.data)
 
 class TagViewSet(viewsets.ViewSet):
-    queryset = Tag.objects.all().order_by('-id')
+    queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    filter_backends = [
+        ExcludeTagFilterBackend,
+        OrderingFilter,
+    ]
+    filter_fields = '__all__'
+    ordering_fields = '__all__'
+    ordering = '?'
 
+    def get_serializer(self, queryset, many=True):
+        return self.serializer_class(queryset, many=many)
+
+    @filtering
     def list(self, request, *args, **kwargs):
-        serializer = self.serializer_class(self.queryset, many=True)
-        return Response(data=serializer.data)
+        return self.queryset
