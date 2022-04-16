@@ -75,7 +75,7 @@ class Tag(models.Model):
         verbose_name_plural = "تگ ها"
 
 class Category(models.Model):
-    group = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name="گروه")
+    group = models.ForeignKey('self', null=True, on_delete=models.CASCADE, verbose_name="گروه")
     title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
