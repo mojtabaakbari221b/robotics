@@ -8,7 +8,6 @@ from django.contrib.admin import display
 from .models_validators import (
     validate_media_extension,
     validate_slug,
-    validate_tag,
 )
 from common.utilities import (
     ImageFieldForPanelAdmin,
@@ -65,16 +64,6 @@ class Galery(models.Model, ImageFieldForPanelAdmin):
             return self.video_poster
         return self.media
 
-class Group(models.Model):
-    title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
-
-    def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.title})'
-
-    class Meta: 
-        verbose_name = "گروه"
-        verbose_name_plural = "گروه ها"
-
 class Tag(models.Model):
     title = models.CharField(max_length=4096, null=False, blank=True, verbose_name="عنوان تگ")
 
@@ -86,11 +75,14 @@ class Tag(models.Model):
         verbose_name_plural = "تگ ها"
 
 class Category(models.Model):
-    group = models.ForeignKey(Group, null=False , on_delete=models.CASCADE, verbose_name="گروه")
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name="گروه")
     title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
-        return f'{self._meta.verbose_name}({self.id} , {self.group.title} - {self.title})'
+        if self.parent :
+            return f'{self._meta.verbose_name}({self.id} , گروه: {self.parent.title} - {self.title})'
+        else :
+            return f'{self._meta.verbose_name}({self.id} , {self.title})'
 
     class Meta: 
         verbose_name = "دسته بندی"
@@ -195,7 +187,6 @@ class Product(models.Model, ImageFieldForPanelAdmin):
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
     standard = models.ManyToManyField(Standards, verbose_name="استاندارد ها", blank=True)
-    group = models.ManyToManyField(Group, blank=True, verbose_name="گروه ها")
 
     def __str__(self):
         return f'{self._meta.verbose_name}({self.id} , {self.organ.name} - {self.name})'

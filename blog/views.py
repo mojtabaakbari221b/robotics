@@ -6,7 +6,6 @@ from rest_framework.filters import OrderingFilter
 from blog.decorator import filtering
 from rest_framework.response import Response
 from .models import (
-    Group,
     Category,
     Info,
     Contact,
@@ -21,7 +20,6 @@ from .models import (
     Tag,
 )
 from .serializers import (
-    GroupSerializer,
     CategorySerializer,
     OrganSerializer,
     InfoSerializer,
@@ -36,27 +34,21 @@ from .serializers import (
     TagSerializer,
 )
 
-class SlideShowViewSet(viewsets.ModelViewSet):
-    queryset = SlideShow.objects.all().order_by('-id')[:6]
-    serializer_class = SlideShowSerializer
-
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all().order_by('-id')
-    serializer_class = GroupSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]
-    filter_fields = '__all__'
-    ordering_fields = '__all__'
-    ordering = '?'
+    queryset = Category.objects.filter(parent=None).order_by('-id')
+    serializer_class = CategorySerializer
 
     @filtering
     def list(self, request, *args, **kwargs):
         return self.queryset
 
+class SlideShowViewSet(viewsets.ModelViewSet):
+    queryset = SlideShow.objects.all().order_by('-id')[:6]
+    serializer_class = SlideShowSerializer
+
+
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().select_related('group').order_by('-id')
+    queryset = Category.objects.all().order_by('-id')
     serializer_class = CategorySerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -73,7 +65,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return self.queryset
 
 class OrganViewSet(viewsets.ModelViewSet):
-    queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category__group').all()
+    queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category__category').all()
     serializer_class = OrganSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -85,7 +77,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
 class InfoViewSet(viewsets.ModelViewSet):
-    queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')
+    queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')
     serializer_class = InfoSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -96,7 +88,7 @@ class InfoViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')
+    queryset = Contact.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')
     serializer_class = ContactSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -119,7 +111,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.\
-        prefetch_related('category__group' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category__group', 'organ__standards')\
+        prefetch_related('category__category' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')\
             .all()
     # queryset = Product.objects.all()
     serializer_class = ProductSerializer

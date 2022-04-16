@@ -1,7 +1,6 @@
 from .models import *
 from django.db.models.signals import (
     post_save,
-    m2m_changed,
     pre_save,
     post_delete,
 )
@@ -59,12 +58,6 @@ def remove_deleted_promote_entity_from_slideshow(sender, instance, **kwargs):
     if instance.is_promote :
         slideshow_s.delete()
 
-@receiver(m2m_changed, sender=Product.group.through)
-def add_category_from_product_group_to_organ(sender, instance, *args,**kwargs):
-    products = Product.objects.filter(organ=instance.organ).values('id')
-    groups = Group.objects.filter(product__id__in=products).values('id')
-    categories = Category.objects.filter(group__in=groups).distinct()
-    instance.organ.category.add(*categories)
 
 @receiver(post_delete, sender=SlideShow)
 def remove_promote_from_content(sender, instance, *args,**kwargs):

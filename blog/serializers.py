@@ -25,13 +25,7 @@ class GallerySerializer(serializers.ModelSerializer):
         model = models.Galery
         fields = '__all__'
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Group
-        fields = '__all__'
-
 class CategorySerializer(serializers.ModelSerializer):
-    group = GroupSerializer()
 
     class Meta:
         model = models.Category
