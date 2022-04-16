@@ -65,7 +65,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return self.queryset
 
 class OrganViewSet(viewsets.ModelViewSet):
-    queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category__category').all()
+    queryset = Organ.objects.prefetch_related('gallery','standards', 'tags', 'files', 'category').all()
     serializer_class = OrganSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -77,7 +77,7 @@ class OrganViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
 
 class InfoViewSet(viewsets.ModelViewSet):
-    queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')
+    queryset = Info.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category', 'organ__standards')
     serializer_class = InfoSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -88,7 +88,7 @@ class InfoViewSet(viewsets.ModelViewSet):
     ordering = '?'
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')
+    queryset = Contact.objects.all().prefetch_related('organ__gallery', 'organ__tags', 'organ__files', 'organ__category', 'organ__standards')
     serializer_class = ContactSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -111,7 +111,7 @@ class StandardsViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.\
-        prefetch_related('category__category' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category__category', 'organ__standards')\
+        prefetch_related('category' , 'gallery', 'files', 'tags', 'standard','organ__gallery', 'organ__tags', 'organ__files', 'organ__category', 'organ__standards')\
             .all()
     # queryset = Product.objects.all()
     serializer_class = ProductSerializer
