@@ -66,12 +66,6 @@ def add_category_from_product_group_to_organ(sender, instance, *args,**kwargs):
     categories = Category.objects.filter(group__in=groups).distinct()
     instance.organ.category.add(*categories)
 
-@receiver(m2m_changed, sender=Product.category.through)
-def add_Category_to_organ(sender, instance, *args,**kwargs):
-    products = Product.objects.filter(organ=instance.organ).values('id')
-    categories = Category.objects.filter(product__id__in=products).distinct()
-    instance.organ.category.add(*categories)
-
 @receiver(post_delete, sender=SlideShow)
 def remove_promote_from_content(sender, instance, *args,**kwargs):
     content_type = ContentType.objects.get(app_label=instance.content_type.app_label, model=instance.content_type.model)

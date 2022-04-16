@@ -116,7 +116,7 @@ class Organ(models.Model, ImageFieldForPanelAdmin):
     is_promote = models.BooleanField(default=False, verbose_name="یک ارگان ویژه است ؟")
     gallery = models.ManyToManyField(Galery, verbose_name="گالری", blank=True)
     files = models.ManyToManyField(File, verbose_name="فایل ها", blank=True)
-    category = models.ManyToManyField(Category, editable=False, blank=True, verbose_name="دسته بندی ها")
+    category = models.ManyToManyField(Category , blank=True, verbose_name="دسته بندی ها")
     standards = models.ManyToManyField('Standards', blank=True, related_name='organ_standards', verbose_name="استاندارد ها")
     thumbnail = models.ImageField(upload_to='organization/banner_logo', null=True , blank=True)
     slug = models.TextField(validators=[validate_slug,], unique=True, null=True, blank=True)
