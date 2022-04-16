@@ -1,3 +1,4 @@
+from tokenize import group
 from rest_framework import serializers
 from . import models
 
@@ -25,7 +26,16 @@ class GallerySerializer(serializers.ModelSerializer):
         model = models.Galery
         fields = '__all__'
 
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = (
+            'id',
+            'title',
+        )
+
 class CategorySerializer(serializers.ModelSerializer):
+    group = SubCategorySerializer(many=False)
 
     class Meta:
         model = models.Category

@@ -75,12 +75,12 @@ class Tag(models.Model):
         verbose_name_plural = "تگ ها"
 
 class Category(models.Model):
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name="گروه")
+    group = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name="گروه")
     title = models.CharField(null=False , max_length=512, verbose_name="عنوان")
 
     def __str__(self):
-        if self.parent :
-            return f'{self._meta.verbose_name}({self.id} , گروه: {self.parent.title} - {self.title})'
+        if self.group :
+            return f'{self._meta.verbose_name}({self.id} , گروه: {self.group.title} - {self.title})'
         else :
             return f'{self._meta.verbose_name}({self.id} , {self.title})'
 

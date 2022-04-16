@@ -1,4 +1,5 @@
 from this import d
+from tokenize import group
 from rest_framework import viewsets
 from url_filter.integrations.drf import DjangoFilterBackend
 from .filters import ExcludeTagFilterBackend
@@ -35,7 +36,7 @@ from .serializers import (
 )
 
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.filter(parent=None).order_by('-id')
+    queryset = Category.objects.filter(group=None).order_by('-id')
     serializer_class = CategorySerializer
 
     @filtering
