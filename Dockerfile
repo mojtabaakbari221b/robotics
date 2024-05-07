@@ -13,5 +13,5 @@ WORKDIR $HOME
 # Installing requirements
 COPY * $HOME
 
-RUN pip install -r base.txt
 RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
