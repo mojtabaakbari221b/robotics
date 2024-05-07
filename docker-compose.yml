@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+  robomech_postgresql:
+    image:
+      postgres:14
+    volumes:
+      - robomech_postgresql_volume:/var/lib/postgresql/data
+    restart: always
+    env_file: ./.env.d/.env
+    networks:
+      - robomech_network
+  
+  robomech:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["/bin/sh", "/opt/robomech/entrypoint.sh"]
+    volumes:
+      - robomech_static_volume:/opt/robomech/static
+      - robomech_media_volume:/opt/robomech/media
+    restart: always
+    ports:
+      - "127.0.0.1:8012:8000"
+    networks:
+      - robomech_network
+    depends_on:
+      - robomech_postgresql
+
+
+volumes:
+  robomech_postgresql_volume:
+    driver: local
+    name: robomech_postgresql_volume
+  robomech_static_volume:
+    driver: local
+    name: robomech_static_volume
+  robomech_media_volume:
+    driver: local
+    name: robomech_media_volume
+
+
+networks:
+  robomech_network:
+    driver: bridge
+    name: robomech_network
